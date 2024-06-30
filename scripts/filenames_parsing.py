@@ -18,6 +18,13 @@ def parse_arguments():
     parser.add_argument('--pident', type=int, default=95, help='Percent of identity threshold')
     return parser.parse_args()
 
+def filename_parsing(file):
+    filename = file.split("/")[-1][:-4] # file name without extension
+    sample_type = file.split("_")[1] # sample type: C - culture, P - plasmid etc.
+    sample_name = file.split("_")[2] # sample name
+    primer = file.split("_")[3] # primer
+    return {'filename': filename, 'sample_type': sample_type, 'sample_name': sample_name, 'primer': primer}
+
 def filenames_parsing():
     args = parse_arguments()
     dir = args.input_directory
@@ -28,17 +35,16 @@ def filenames_parsing():
         path=os.path.join(dir, item)
         if os.path.isfile(path):
             files.append(path)
-    ab1_files=[file for file in files if ".ab1" in file]
-    filenames = [file.split("/")[-1][:-4] for file in ab1_files] # without extension
-    sample_types = [file.split("_")[1] for file in ab1_files]
-    sample_names = [file.split("_")[2] for file in ab1_files]
-    primers = [file.split("_")[3] for file in ab1_files]
-
-    return zip(filenames, sample_types, sample_names, primers)
+    ab1_files=[file for file in files if ".ab1" in file] # full paths to ab1 files
+    filenames = [file.split("/")[-1][:-4] for file in ab1_files] # file names without extension
+    sample_types = [file.split("_")[1] for file in ab1_files] # sample type: C - culture, P - plasmid etc.
+    sample_names = [file.split("_")[2] for file in ab1_files] # sample name
+    primers = [file.split("_")[3] for file in ab1_files] # primers
+    return zip(ab1_files, filenames, sample_types, sample_names, primers)
     
 def main():
-    for f,t,n,p in filenames_parsing():
-        print(f,t,n,p)
+    result = filename_parsing("../blast/data/101424/Plate-2024-04-10_C_1_16S155F1_A02_01_2.ab1")
+    print(result)
 
 if __name__ == "__main__":
     main()
