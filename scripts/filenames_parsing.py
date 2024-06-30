@@ -25,6 +25,15 @@ def filename_parsing(file):
     primer = file.split("_")[3] # primer
     return {'filename': filename, 'sample_type': sample_type, 'sample_name': sample_name, 'primer': primer, 'path': file}
     
+def ab1_to_fastq(file):
+    return fq
+
+def trimming(file):
+
+def alignment(files):
+
+def find_consensus(aln):
+
 def main():
     args = parse_arguments()
     #dir = args.input_directory
