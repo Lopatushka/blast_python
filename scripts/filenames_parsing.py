@@ -16,19 +16,15 @@ def parse_arguments():
     parser.add_argument('--pident', type=int, default=95, help='Percent of identity threshold')
     return parser.parse_args()
 
-def filenames_parsing(dir):
-    args =  parse_arguments()
+def filenames_parsing():
+    args = parse_arguments()
     dir = args.input_directory
-    print(dir)
-    return None
+    return dir
 
 def main():
-
-    tq = args.trimming_quality
-    db = args.database
-    print("dir is", dir)
-    print("tq is", tq)
-    print("db is", db)
+    dir = filenames_parsing()
+    print(dir)
+    return None
 
 if __name__ == "__main__":
     main()
