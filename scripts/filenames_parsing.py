@@ -18,7 +18,7 @@ def parse_arguments():
     parser.add_argument('--pident', type=int, default=95, help='Percent of identity threshold')
     return parser.parse_args()
 
-def filenames_bulk_parsing():
+def filenames_parsing():
     args = parse_arguments()
     dir = args.input_directory
     dir = "../blast/data/101424"
@@ -29,11 +29,16 @@ def filenames_bulk_parsing():
         if os.path.isfile(path):
             files.append(path)
     ab1_files=[file for file in files if ".ab1" in file]
-    sample_names=np.unique([file.split("_")[1] for file in ab1_files])
-    return sample_names
+    filenames = [file.split("/")[-1][:-4] for file in ab1_files] # without extension
+    sample_types = [file.split("_")[1] for file in ab1_files]
+    sample_names = [file.split("_")[2] for file in ab1_files]
+    primers = [file.split("_")[3] for file in ab1_files]
 
+    return zip(filenames, sample_types, sample_names, primers)
+    
 def main():
-    print(filenames_bulk_parsing())
+    for f,t,n,p in filenames_parsing():
+        print(f,t,n,p)
 
 if __name__ == "__main__":
     main()
