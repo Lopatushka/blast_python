@@ -1,4 +1,6 @@
 import argparse
+import os
+import numpy as np
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -16,15 +18,22 @@ def parse_arguments():
     parser.add_argument('--pident', type=int, default=95, help='Percent of identity threshold')
     return parser.parse_args()
 
-def filenames_parsing():
+def filenames_bulk_parsing():
     args = parse_arguments()
     dir = args.input_directory
-    return dir
+    dir = "../blast/data/101424"
+
+    files = []
+    for item in os.listdir(dir):
+        path=os.path.join(dir, item)
+        if os.path.isfile(path):
+            files.append(path)
+    ab1_files=[file for file in files if ".ab1" in file]
+    sample_names=np.unique([file.split("_")[1] for file in ab1_files])
+    return sample_names
 
 def main():
-    dir = filenames_parsing()
-    print(dir)
-    return None
+    print(filenames_bulk_parsing())
 
 if __name__ == "__main__":
     main()
