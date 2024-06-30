@@ -30,7 +30,8 @@ def ab1_to_fastq(input_ab1, output_fq):
     record = SeqIO.read(input_ab1, "abi")
     SeqIO.write(record, output_fq, "fastq")
 
-#def trimming(file):
+#def trimming(input_fq, output_fq):
+    #os.system("bbduk.sh -Xmx2g in= + "out=" + fq_trimmed + " qtrim=rl trimq=15 qin=33 minlength=50 > /dev/null 2>&1")
 
 #def alignment(files):
 
@@ -49,11 +50,13 @@ def main():
         if os.path.isfile(path):
             files.append(path)
     ab1_files=[file for file in files if ".ab1" in file] # full paths to ab1 files
-    results = [filename_parsing(file) for file in ab1_files] # filenames parsing
-    print(results)
+    results = [filename_parsing(file) for file in ab1_files] # dictionary with files data
+
+    for file in results:
+        fq = file["path"][:-3]+"fq"
+        ab1_to_fastq(file["path"], fq) # convert ab1 to fastq
 
     #path = "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.ab1"
-    #ab1_to_fastq(path, "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.fq")
 
 if __name__ == "__main__":
     main()
