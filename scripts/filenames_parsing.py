@@ -23,11 +23,14 @@ def filename_parsing(file):
     sample_type = file.split("_")[1] # sample type: C - culture, P - plasmid etc.
     sample_name = file.split("_")[2] # sample name
     primer = file.split("_")[3] # primer
-    return {'filename': filename, 'sample_type': sample_type, 'sample_name': sample_name, 'primer': primer}
+    return {'filename': filename, 'sample_type': sample_type, 'sample_name': sample_name, 'primer': primer, 'path': file}
     
 def main():
     args = parse_arguments()
     #dir = args.input_directory
+    #mode = args.files_processing_mode
+    #if mode == "auto":
+
     dir = "../blast/data/101424"
     files = []
     for item in os.listdir(dir):
@@ -35,7 +38,7 @@ def main():
         if os.path.isfile(path):
             files.append(path)
     ab1_files=[file for file in files if ".ab1" in file] # full paths to ab1 files
-    results = [filename_parsing(file) for file in ab1_files]
+    results = [filename_parsing(file) for file in ab1_files] # filenames parsing
     print(results)
 
 if __name__ == "__main__":
