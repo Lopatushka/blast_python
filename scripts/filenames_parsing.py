@@ -1,6 +1,7 @@
 import argparse
 import os
 import numpy as np
+from Bio import SeqIO
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -25,14 +26,15 @@ def filename_parsing(file):
     primer = file.split("_")[3] # primer
     return {'filename': filename, 'sample_type': sample_type, 'sample_name': sample_name, 'primer': primer, 'path': file}
     
-def ab1_to_fastq(file):
-    return fq
+def ab1_to_fastq(input_ab1, output_fq):
+    record = SeqIO.read(input_ab1, "abi")
+    SeqIO.write(record, output_fq, "fastq")
 
-def trimming(file):
+#def trimming(file):
 
-def alignment(files):
+#def alignment(files):
 
-def find_consensus(aln):
+#def find_consensus(aln):
 
 def main():
     args = parse_arguments()
@@ -49,6 +51,9 @@ def main():
     ab1_files=[file for file in files if ".ab1" in file] # full paths to ab1 files
     results = [filename_parsing(file) for file in ab1_files] # filenames parsing
     print(results)
+
+    #path = "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.ab1"
+    #ab1_to_fastq(path, "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.fq")
 
 if __name__ == "__main__":
     main()
