@@ -19,7 +19,7 @@ def parse_arguments():
 def filenames_parsing(dir):
     args =  parse_arguments()
     dir = args.input_directory
-    
+    print(dir)
     return None
 
 def main():
