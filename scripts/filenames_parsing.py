@@ -149,7 +149,7 @@ def run_blastn(input_file, database, num_threads=4):
                    stderr=subprocess.PIPE, check=True, shell = True, text=True)
     return p1.stdout 
 
-def blastn_results_processing(data, consensus_name=None, dir="./", qcovus_treshold=80, pident_treshold=95):
+def blastn_results_processing(data, consensus_name=None, database=None, dir="./", qcovus_treshold=80, pident_treshold=95):
     df = pd.read_csv(io.StringIO(data), index_col=False, header = None, sep = "\t",
                      names = ["qseqid", "sacc", "staxid", "evalue", "pident", "mismatch", "gaps", "qcovus", "length", "sscinames"])
     df["sscinames"] = df["sscinames"].str.split(" ").apply(lambda x: [str(x)] if isinstance(x, float) else x).apply(lambda x: x[:2]).apply(lambda x: " ".join(x))     
