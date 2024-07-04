@@ -149,7 +149,45 @@ def run_blastn(input_file, database, num_threads=4):
                    stderr=subprocess.PIPE, check=True, shell = True, text=True)
     return p1.stdout 
 
-#def blastn_results_processing(data):
+def blastn_results_processing(data, consensus_name=None, dir="./", qcovus_treshold=80, pident_treshold=95):
+    df = pd.read_csv(io.StringIO(data), index_col=False, header = None, sep = "\t",
+                     names = ["qseqid", "sacc", "staxid", "evalue", "pident", "mismatch", "gaps", "qcovus", "length", "sscinames"])
+    df["sscinames"] = df["sscinames"].str.split(" ").apply(lambda x: [str(x)] if isinstance(x, float) else x).apply(lambda x: x[:2]).apply(lambda x: " ".join(x))     
+    # Filtration by query coverage - qcovus
+    if sum(df["qcovus"] >= qcovus_treshold) < 5:
+        df = df[:5] # show 5 first hits
+    else:
+        df = df[df["qcovus"] >= qcovus_treshold] # make subset
+
+    # Insert sscinames_occurence column
+    df.insert(9, "sscinames_occurence", 1)
+    unique_values = df["sscinames"].value_counts()
+    for inx in unique_values.index:
+        df.loc[df["sscinames"] == inx, "sscinames_occurence"] = unique_values[inx]
+    
+    # Filtration by pident
+    if sum(df["pident"] >= pident_treshold) < 5:
+        df = df[:5] # show 5 first hits
+    else:
+        df = df[df["pident"] >= pident_treshold] # subset by pident
+    
+    df["pident"] = np.round(df["pident"], 3) # Round pident
+    df = df.sort_values(by='pident', ascending=False) # Sort df by pident
+    df = df[~(df["sscinames"].duplicated(keep='first'))] # Delete duplications of sscinames. Keep first occurences only
+    # Save results
+    output_file_tmp = dir + "/tmp.tsv"
+    output_file = dir + "/blastn.tsv"
+    df.to_csv(output_file_tmp, sep='\t', index=False, header=True, mode="w")
+    with open(output_file_tmp, 'r') as file:
+        content = file.read()
+        add_line = f'file={consensus_name} db={database} qcovus_treshold={qcovus_treshold}, pident_treshold={pident_treshold}'
+        content = add_line + "\n" + content + "\n"
+
+    with open(output_file, 'a') as file: # save modified file
+        file.write(content)
+    
+    if os.path.exists(output_file_tmp): # remove tmp file
+        os.remove(output_file_tmp)
 
 def main():
     args = parse_arguments()
@@ -194,6 +232,7 @@ def main():
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
     data = [filename_parsing(file) for file in fa_files]
     sample_names = np.unique([file['sample_name'] for file in data])
+    dir = np.unique([file['dir'] for file in data])
     for sample_name in sample_names:
         pairs = []
         for file in data:
@@ -225,6 +264,7 @@ def main():
             if check_consensus_quality(consensus_name, threshold = 15):
                 # Blastn search for consenus
                 result = run_blastn(consensus_name, database, num_threads=4)
+                #blastn_results_processing(result, consensus_name = consensus, dir = dir, qcovus_treshold=80, pident_treshold=95)
                 
             else:
                 # Blastn search for files in pairs independently
