@@ -66,7 +66,7 @@ def reverse_complement_fasta(input_fasta, output_fasta):
     record_rc = record.reverse_complement()
     record_rc.id = record.id
     record_rc.name = record.name
-    with open(output_fasta, "a") as f:
+    with open(output_fasta, "w") as f:
             SeqIO.write(record_rc, f, "fasta")
 
 def remove_file_by_pattern(dir, pattern):
@@ -77,6 +77,12 @@ def remove_file(path_to_file):
     command = f'rm -f {path_to_file}'
     subprocess.run(command, capture_output=True, check=True, shell=True)
         
+def merge_fasta_files(input_fasta_files, output_fasta):
+    with open(output_fasta, "w") as output_handle:
+        for input_file in input_fasta_files:
+            records = SeqIO.parse(input_file, "fasta")
+            SeqIO.write(records, output_handle, "fasta")
+
 #def run_clustalw(files):
 
 #def find_consensus(aln):
@@ -121,6 +127,7 @@ def main():
 
     # 2nd cycle - make alignment, build consensus
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
+    '''
     data = [filename_parsing(file) for file in fa_files]
     sample_names = np.unique([file['sample_name'] for file in data])
     for sample_name in sample_names:
@@ -134,6 +141,7 @@ def main():
             # blast
             pass
         else:
+            # write files to the same .fa file
             # make aln
             # make consensus
             # blast
@@ -141,6 +149,7 @@ def main():
 
         print(pairs, length)
         pairs = []
+    '''
 
 
 if __name__ == "__main__":
