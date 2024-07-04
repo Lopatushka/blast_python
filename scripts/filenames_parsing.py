@@ -25,7 +25,14 @@ def filename_parsing(file):
     sample_type = file.split("_")[1] # sample type: C - culture, P - plasmid etc.
     sample_name = file.split("_")[2] # sample name
     primer = file.split("_")[3] # primer
-    return {'filename': filename, 'sample_type': sample_type, 'sample_name': sample_name, 'primer': primer, 'path': file}
+    dir = "/".join(file.split("/")[:-1]) # path to directory
+    return {'filename': filename,
+            'sample_type': sample_type,
+            'sample_name': sample_name,
+            'primer': primer,
+            'path': file,
+            'dir': dir}
+
     
 def ab1_to_fastq(input_ab1, output_fq):
     record = SeqIO.read(input_ab1, "abi")
@@ -53,6 +60,11 @@ def reverse_complement_fasta(input_fasta, output_fasta):
     with open(output_fasta, "a") as f:
             SeqIO.write(record_rc, f, "fasta")
 
+def remove_files(path, pattern):
+    command = ['rm', f'{path}/*{pattern}*']
+    subprocess.run(command, capture_output=True, check=True)
+        
+
 #def alignment(files):
 
 #def find_consensus(aln):
@@ -78,7 +90,7 @@ def main():
 
     # Main cycle
     for file in data:
-        print(file['primer'], "R" in file['primer'])
+        print(file)
 
         # Generation of fastq files
         fq = file["path"][:-3]+"fq" # name of fastq file
@@ -86,7 +98,7 @@ def main():
 
         # Trimming fastq files
         fq_trimmed = fq[:-3] + "_trimmed.fq" # name of trimmed fastq files
-        run_bbduk(fq, fq_trimmed, trimq = 15, minlength = 50) # trimming fq files
+        run_bbduk(fq, fq_trimmed, trimq = 15, minlength = 50)
 
         # Convert trimmed fastq file to fasta file
         fa_trimmed = fq_trimmed[:-2]+"fa" # name of trimmed fasta file
@@ -96,6 +108,8 @@ def main():
         if "R" in file['primer']:
             fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # name of fasta revese complement
             reverse_complement_fasta(fa_trimmed, fa_trimmed_rc)
+
+            #remove_files()
 
 
     #path = "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.ab1"
