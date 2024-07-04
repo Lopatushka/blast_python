@@ -45,8 +45,13 @@ def fastq_to_fasta(input_fq, output_fa):
     with open(input_fq, "r") as fq, open(output_fa, "w") as fa:
         SeqIO.convert(fq, "fastq", fa, "fasta")
 
-
-#def reverse_complement(input_fa, output_fa):
+def reverse_complement_fasta(input_fasta, output_fasta):
+    record = SeqIO.read(input_fasta, "fasta")
+    record_rc = record.reverse_complement()
+    record_rc.id = record.id
+    record_rc.name = record.name
+    with open(output_fasta, "a") as f:
+            SeqIO.write(record_rc, f, "fasta")
 
 #def alignment(files):
 
@@ -73,6 +78,8 @@ def main():
 
     # Main cycle
     for file in data:
+        print(file['primer'], "R" in file['primer'])
+
         # Generation of fastq files
         fq = file["path"][:-3]+"fq" # name of fastq file
         ab1_to_fastq(file["path"], fq) # create fq files from ab1 files
@@ -84,6 +91,12 @@ def main():
         # Convert trimmed fastq file to fasta file
         fa_trimmed = fq_trimmed[:-2]+"fa" # name of trimmed fasta file
         fastq_to_fasta(fq_trimmed, fa_trimmed)
+
+        # Make reverse complement if primer is reverse
+        if "R" in file['primer']:
+            fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # name of fasta revese complement
+            reverse_complement_fasta(fa_trimmed, fa_trimmed_rc)
+
 
     #path = "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.ab1"
 
