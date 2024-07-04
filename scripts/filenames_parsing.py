@@ -2,7 +2,10 @@ import argparse
 import os
 import subprocess
 import numpy as np
+import pandas as pd
 from Bio import SeqIO
+from Bio import AlignIO
+from collections import Counter
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -86,7 +89,48 @@ def run_clustalw(input_fasta):
     command = f'clustalw2 {input_fasta}'
     subprocess.run(command, capture_output=True, check=True, shell = True)
 
-#def find_consensus(aln):
+def get_custom_consensus_from_aln(aln_file, threshold=0.7):
+    # IUPAC nucleotide codes
+    iupac_codes = {
+    frozenset(['A']): 'A',
+    frozenset(['C']): 'C',
+    frozenset(['G']): 'G',
+    frozenset(['T']): 'T',
+    frozenset(['A', 'G']): 'R',
+    frozenset(['C', 'T']): 'Y',
+    frozenset(['G', 'C']): 'S',
+    frozenset(['A', 'T']): 'W',
+    frozenset(['G', 'T']): 'K',
+    frozenset(['A', 'C']): 'M',
+    frozenset(['A', 'C', 'G']): 'V',
+    frozenset(['A', 'C', 'T']): 'H',
+    frozenset(['A', 'G', 'T']): 'D',
+    frozenset(['C', 'G', 'T']): 'B',
+    frozenset(['A', 'C', 'G', 'T']): 'N',
+}
+    alignment = AlignIO.read(aln_file, "clustal")
+    num_sequences = len(alignment) # number of sequences
+    alignment_length = alignment.get_alignment_length() # length of each sequences
+    consensus = []
+    for i in range(alignment_length):
+        column = alignment[:, i]
+        _count = column.count("-") # occurence of '-' in column
+        column = column.replace("-", "") # delete "-" symbol from consensus     
+        column += "-" *  _count # place '-' to the end of column
+        counter = Counter(column)
+        most_common_residue, count = counter.most_common(1)[0]
+        if count / num_sequences >= threshold:
+            consensus.append(most_common_residue)
+        else:
+            residue_set = frozenset([residue for residue in counter if residue != '-']) # delele '-' from column
+            iupac_code = iupac_codes.get(residue_set, 'N')
+            consensus.append(iupac_code)
+    consensus_seq = ''.join(consensus)
+    consensus_name = aln_file.split("/")[-1][:-4]
+    with open(consensus_fa, "w") as f:
+        f.write(f'>{consensus_name}_consensus' + "\n")
+        f.write(consensus_seq)
+
 
 def main():
     args = parse_arguments()
@@ -150,9 +194,12 @@ def main():
             
             # Make alignment
             run_clustalw(merge_name)
-            remove_file_by_pattern(subset_sample_dir, 'dnd')
+            remove_file_by_pattern(subset_sample_dir, 'dnd') # delete .dnd files
 
-            # make consensus
+            # Make consensus
+            aln_name = merge_name[:-2]+"aln"
+            consensus_name = aln_name[:-4] + "_consensus.fa"
+            #get_custom_consensus_from_aln(aln_name, 0.7)
             # blast
 
         #print(pairs, length)
