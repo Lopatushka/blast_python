@@ -32,8 +32,7 @@ def filename_parsing(file):
             'primer': primer,
             'path': file,
             'dir': dir}
-
-    
+ 
 def ab1_to_fastq(input_ab1, output_fq):
     record = SeqIO.read(input_ab1, "abi")
     SeqIO.write(record, output_fq, "fastq")
@@ -60,9 +59,9 @@ def reverse_complement_fasta(input_fasta, output_fasta):
     with open(output_fasta, "a") as f:
             SeqIO.write(record_rc, f, "fasta")
 
-def remove_files(path, pattern):
-    command = ['rm', f'{path}/*{pattern}*']
-    subprocess.run(command, capture_output=True, check=True)
+def remove_files(dir, pattern):
+    command = f'rm {dir}/*{pattern}'
+    subprocess.run(command, capture_output=True, check=True, shell=True)
         
 
 #def alignment(files):
@@ -91,7 +90,6 @@ def main():
     # Main cycle
     for file in data:
         print(file)
-
         # Generation of fastq files
         fq = file["path"][:-3]+"fq" # name of fastq file
         ab1_to_fastq(file["path"], fq) # create fq files from ab1 files
@@ -103,13 +101,13 @@ def main():
         # Convert trimmed fastq file to fasta file
         fa_trimmed = fq_trimmed[:-2]+"fa" # name of trimmed fasta file
         fastq_to_fasta(fq_trimmed, fa_trimmed)
+        remove_files(file['dir'], pattern=".fq") # remove .fq files
 
         # Make reverse complement if primer is reverse
         if "R" in file['primer']:
             fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # name of fasta revese complement
             reverse_complement_fasta(fa_trimmed, fa_trimmed_rc)
-
-            #remove_files()
+            #remove_files(file['dir'], pattern="_trimmed.fa")
 
 
     #path = "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.ab1"
