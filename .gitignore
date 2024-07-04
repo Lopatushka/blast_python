@@ -1,2 +1,6 @@
 scripts/test.py
 test.txt
+draft.py
+taxdb.btd
+taxdb.bti
+taxonomy4blast.sqlite3
