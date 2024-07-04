@@ -20,6 +20,16 @@ def parse_arguments():
     parser.add_argument('--pident', type=int, default=95, help='Percent of identity threshold')
     return parser.parse_args()
 
+def list_of_files(dir, extension):
+        files = []
+        for item in os.listdir(dir):
+            path=os.path.join(dir, item)
+            if os.path.isfile(path):
+                files.append(path)
+        subset_of_files=[file for file in files if f'.{extension}' in file] # full paths to .ext files
+        return subset_of_files
+
+
 def filename_parsing(file):
     filename = file.split("/")[-1][:-4] # file name without extension
     sample_type = file.split("_")[1] # sample type: C - culture, P - plasmid etc.
@@ -67,8 +77,7 @@ def remove_file(path_to_file):
     command = f'rm -f {path_to_file}'
     subprocess.run(command, capture_output=True, check=True, shell=True)
         
-
-#def alignment(files):
+#def run_clustalw(files):
 
 #def find_consensus(aln):
 
@@ -81,37 +90,32 @@ def main():
     dir = "../blast/data/101424"
 
     # Bulk processing
-    files = []
-    for item in os.listdir(dir):
-        path=os.path.join(dir, item)
-        if os.path.isfile(path):
-            files.append(path)
-    ab1_files=[file for file in files if ".ab1" in file] # full paths to ab1 files
+    ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
     data = [filename_parsing(file) for file in ab1_files] # dictionary with files data
-
+    
     # Pattern processing
 
     # Main cycle
     for file in data:
         #print(file)
         # Generation of fastq files
-        fq = file["path"][:-3]+"fq" # name of fastq file
-        ab1_to_fastq(file["path"], fq) # create fq files from ab1 files
+        fq = file["path"][:-3]+"fq" # path to fastq file
+        ab1_to_fastq(file["path"], fq) # create fq file from ab1 file
 
         # Trimming fastq files
-        fq_trimmed = fq[:-3] + "_trimmed.fq" # name of trimmed fastq files
+        fq_trimmed = fq[:-3] + "_trimmed.fq" # path to trimmed fastq file
         run_bbduk(fq, fq_trimmed, trimq = 15, minlength = 50)
 
         # Convert trimmed fastq file to fasta file
-        fa_trimmed = fq_trimmed[:-2]+"fa" # name of trimmed fasta file
-        fastq_to_fasta(fq_trimmed, fa_trimmed)
+        fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
+        fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
         remove_file_by_pattern(file['dir'], pattern=".fq") # remove .fq files
 
         # Make reverse complement if primer is reverse
         if "R" in file['primer']:
-            fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # name of fasta revese complement
-            reverse_complement_fasta(fa_trimmed, fa_trimmed_rc)
-            remove_file(fa_trimmed)
+            fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
+            reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
+            remove_file(fa_trimmed) # remove original fasta file
 
 
 if __name__ == "__main__":
