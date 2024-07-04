@@ -29,7 +29,6 @@ def list_of_files(dir, extension):
         subset_of_files=[file for file in files if f'.{extension}' in file] # full paths to .ext files
         return subset_of_files
 
-
 def filename_parsing(file):
     filename = file.split("/")[-1][:-4] # file name without extension
     sample_type = file.split("_")[1] # sample type: C - culture, P - plasmid etc.
@@ -83,7 +82,9 @@ def merge_fasta_files(input_fasta_files, output_fasta):
             records = SeqIO.parse(input_file, "fasta")
             SeqIO.write(records, output_handle, "fasta")
 
-#def run_clustalw(files):
+def run_clustalw(input_fasta):
+    command = f'clustalw2 {input_fasta}'
+    subprocess.run(command, capture_output=True, check=True, shell = True)
 
 #def find_consensus(aln):
 
@@ -148,10 +149,11 @@ def main():
             merge_fasta_files(pairs, merge_name)
             
             # Make alignment
-            
+            run_clustalw(merge_name)
+            remove_file_by_pattern(subset_sample_dir, 'dnd')
+
             # make consensus
             # blast
-            pass
 
         #print(pairs, length)
         pairs = []
