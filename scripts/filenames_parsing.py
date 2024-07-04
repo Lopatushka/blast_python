@@ -41,7 +41,10 @@ def run_bbduk(input_fq, output_fq, trimq, minlength):
            f'minlength={minlength}']
     p1 = subprocess.run(command, stderr=subprocess.DEVNULL)
 
-#def fq_to_fa(input_fq, output_fa):
+def fastq_to_fasta(input_fq, output_fa):
+    with open(input_fq, "r") as fq, open(output_fa, "w") as fa:
+        SeqIO.convert(fq, "fastq", fa, "fasta")
+
 
 #def reverse_complement(input_fa, output_fa):
 
@@ -77,6 +80,10 @@ def main():
         # Trimming fastq files
         fq_trimmed = fq[:-3] + "_trimmed.fq" # name of trimmed fastq files
         run_bbduk(fq, fq_trimmed, trimq = 15, minlength = 50) # trimming fq files
+
+        # Convert trimmed fastq file to fasta file
+        fa_trimmed = fq_trimmed[:-2]+"fa" # name of trimmed fasta file
+        fastq_to_fasta(fq_trimmed, fa_trimmed)
 
     #path = "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.ab1"
 
