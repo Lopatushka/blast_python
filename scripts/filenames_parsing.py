@@ -1,5 +1,6 @@
 import argparse
 import os
+import subprocess
 import numpy as np
 from Bio import SeqIO
 
@@ -30,8 +31,15 @@ def ab1_to_fastq(input_ab1, output_fq):
     record = SeqIO.read(input_ab1, "abi")
     SeqIO.write(record, output_fq, "fastq")
 
-#def trimming(input_fq, output_fq):
-    #os.system("bbduk.sh -Xmx2g in= + "out=" + fq_trimmed + " qtrim=rl trimq=15 qin=33 minlength=50 > /dev/null 2>&1")
+def run_bbduk(input_fq, output_fq, trimq, minlength):
+    command = ['bbduk.sh',
+           f'in={input_fq}',
+           f'out={output_fq}',
+           'qtrim=rl',
+           f'trimq={trimq}',
+           'qin=33',
+           f'minlength={minlength}']
+    p1 = subprocess.run(command, stderr=subprocess.DEVNULL)
 
 #def fq_to_fa(input_fq, output_fa):
 
@@ -62,8 +70,13 @@ def main():
 
     # Main cycle
     for file in data:
-        fq = file["path"][:-3]+"fq"
-        ab1_to_fastq(file["path"], fq) # create fq files from ab1 filess
+        # Generation of fastq files
+        fq = file["path"][:-3]+"fq" # name of fastq file
+        ab1_to_fastq(file["path"], fq) # create fq files from ab1 files
+
+        # Trimming fastq files
+        fq_trimmed = fq[:-3] + "_trimmed.fq" # name of trimmed fastq files
+        run_bbduk(fq, fq_trimmed, trimq = 15, minlength = 50) # trimming fq files
 
     #path = "../blast/data/101424/Plate-2024-04-10_C_1_16SE1114-1096R_C02_03_2.ab1"
 
