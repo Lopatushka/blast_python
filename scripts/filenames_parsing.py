@@ -92,10 +92,12 @@ def main():
     # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
     data = [filename_parsing(file) for file in ab1_files] # dictionary with files data
-    
-    # Pattern processing
 
-    # Main cycle
+    # Processing by pattern
+    # ab1_files =
+    # data = 
+
+    # 1st cycle - trimming, make revese complement
     for file in data:
         #print(file)
         # Generation of fastq files
@@ -116,6 +118,29 @@ def main():
             fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
             reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
             remove_file(fa_trimmed) # remove original fasta file
+
+    # 2nd cycle - make alignment, build consensus
+    fa_files = list_of_files(dir, "fa") # full paths to .fa files
+    data = [filename_parsing(file) for file in fa_files]
+    sample_names = np.unique([file['sample_name'] for file in data])
+    for sample_name in sample_names:
+        pairs = []
+        for file in data:
+            if file['sample_name'] == sample_name:
+                pairs.append(file['path'])
+        length = len(pairs)
+    
+        if length == 1:
+            # blast
+            pass
+        else:
+            # make aln
+            # make consensus
+            # blast
+            pass
+
+        print(pairs, length)
+        pairs = []
 
 
 if __name__ == "__main__":
