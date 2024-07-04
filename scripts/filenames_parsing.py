@@ -131,6 +131,16 @@ def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.7):
         f.write(f'>{consensus_name}_consensus' + "\n")
         f.write(consensus_seq)
 
+def check_consensus_quality(fasta, threshold = 15):
+    consensus = SeqIO.read(fasta, "fasta")
+    consensus_length = len(consensus.seq)
+    N_count = consensus.count("N")
+    N_precentage = np.round(100*N_count/consensus_length, 3)
+    if N_precentage >= threshold:
+       return False # bad consensus
+    else:
+        return True # good consensus
+
 
 def main():
     args = parse_arguments()
@@ -197,14 +207,21 @@ def main():
             remove_file_by_pattern(subset_sample_dir, 'dnd') # delete .dnd files
 
             # Make consensus
-            aln_name = merge_name[:-2]+"aln"
-            consensus_name = aln_name[:-4] + "_consensus.fa"
+            aln_name = merge_name[:-2]+"aln" # path to aln file
+            consensus_name = aln_name[:-4] + "_consensus.fa" # path to consensus file
             get_custom_consensus_from_aln(aln_name, consensus_name, threshold=0.7)
 
             # Check consensus quality
-            # blast
+            if check_consensus_quality(consensus_name, threshold = 15):
+                # Blastn search for consenus
+                pass
+            else:
+                # Blastn search for files in pairs independently
+                pass
 
-        #print(pairs, length)
+            #print(pairs, length)
+
+        
         pairs = []
 
 
