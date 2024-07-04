@@ -89,7 +89,7 @@ def run_clustalw(input_fasta):
     command = f'clustalw2 {input_fasta}'
     subprocess.run(command, capture_output=True, check=True, shell = True)
 
-def get_custom_consensus_from_aln(aln_file, threshold=0.7):
+def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.7):
     # IUPAC nucleotide codes
     iupac_codes = {
     frozenset(['A']): 'A',
@@ -125,7 +125,7 @@ def get_custom_consensus_from_aln(aln_file, threshold=0.7):
             residue_set = frozenset([residue for residue in counter if residue != '-']) # delele '-' from column
             iupac_code = iupac_codes.get(residue_set, 'N')
             consensus.append(iupac_code)
-    consensus_seq = ''.join(consensus)
+    consensus_seq = ''.join(consensus) # make a string
     consensus_name = aln_file.split("/")[-1][:-4]
     with open(consensus_fa, "w") as f:
         f.write(f'>{consensus_name}_consensus' + "\n")
@@ -199,7 +199,9 @@ def main():
             # Make consensus
             aln_name = merge_name[:-2]+"aln"
             consensus_name = aln_name[:-4] + "_consensus.fa"
-            #get_custom_consensus_from_aln(aln_name, 0.7)
+            get_custom_consensus_from_aln(aln_name, consensus_name, threshold=0.7)
+
+            # Check consensus quality
             # blast
 
         #print(pairs, length)
