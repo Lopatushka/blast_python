@@ -127,7 +127,6 @@ def main():
 
     # 2nd cycle - make alignment, build consensus
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
-    '''
     data = [filename_parsing(file) for file in fa_files]
     sample_names = np.unique([file['sample_name'] for file in data])
     for sample_name in sample_names:
@@ -141,15 +140,22 @@ def main():
             # blast
             pass
         else:
-            # write files to the same .fa file
-            # make aln
+            # Merge files for alignment
+            subset_pairs = [filename_parsing(file) for file in pairs]
+            subset_sample_name = np.unique([file['sample_name'] for file in subset_pairs])[0]
+            subset_sample_dir = np.unique([file['dir'] for file in subset_pairs])[0]
+            merge_name = f'{subset_sample_dir}/{subset_sample_name}.fa'
+            merge_fasta_files(pairs, merge_name)
+            
+            # Make alignment
+            
             # make consensus
             # blast
             pass
 
-        print(pairs, length)
+        #print(pairs, length)
         pairs = []
-    '''
+
 
 
 if __name__ == "__main__":
