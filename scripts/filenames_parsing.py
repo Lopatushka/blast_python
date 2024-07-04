@@ -6,6 +6,7 @@ import pandas as pd
 from Bio import SeqIO
 from Bio import AlignIO
 from collections import Counter
+import io
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -141,6 +142,14 @@ def check_consensus_quality(fasta, threshold = 15):
     else:
         return True # good consensus
 
+def run_blastn(input_file, database, num_threads=4):
+    command = f'blastn -query {input_file} -db {database} -num_threads {num_threads}\
+        -outfmt "6 qseqid sacc staxid evalue pident mismatch gaps qcovus length sscinames"'
+    p1 = subprocess.run(command, stdout=subprocess.PIPE,
+                   stderr=subprocess.PIPE, check=True, shell = True, text=True)
+    return p1.stdout 
+
+#def blastn_results_processing(data):
 
 def main():
     args = parse_arguments()
@@ -149,6 +158,7 @@ def main():
     #if mode == "auto":
 
     dir = "../blast/data/101424"
+    database = '../db_16S_ribosomal_RNA/16S_ribosomal_RNA'
 
     # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
@@ -214,7 +224,8 @@ def main():
             # Check consensus quality
             if check_consensus_quality(consensus_name, threshold = 15):
                 # Blastn search for consenus
-                pass
+                result = run_blastn(consensus_name, database, num_threads=4)
+                
             else:
                 # Blastn search for files in pairs independently
                 pass
