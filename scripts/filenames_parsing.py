@@ -82,9 +82,14 @@ def remove_file_by_pattern(dir, pattern):
     else:
         pass
 
-def remove_file(path_to_file):
-    command = f'rm -f {path_to_file}'
-    subprocess.run(command, capture_output=True, check=True, shell=True)
+def remove_file(file_path):
+    if os.path.exists(file_path):
+        try:
+            subprocess.run(['rm', file_path], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error occurred: {e}")
+    else:
+        pass
         
 def merge_fasta_files(input_fasta_files, output_fasta):
     with open(output_fasta, "w") as output_handle:
