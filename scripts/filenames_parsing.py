@@ -195,8 +195,8 @@ def main():
     #mode = args.files_processing_mode
     #if mode == "auto":
 
-    dir = "../blast/data/101424"
-    database = '../db_16S_ribosomal_RNA/16S_ribosomal_RNA'
+    dir = "../blast/data/101424" # directory there all files are stored (ab1, fq, fa, aln)
+    database = '../db_16S_ribosomal_RNA/16S_ribosomal_RNA' # path to blastn database
 
     # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
@@ -208,7 +208,6 @@ def main():
 
     # 1st cycle - trimming, make revese complement
     for file in data:
-        #print(file)
         # Generation of fastq files
         fq = file["path"][:-3]+"fq" # path to fastq file
         ab1_to_fastq(file["path"], fq) # create fq file from ab1 file
@@ -232,7 +231,6 @@ def main():
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
     data = [filename_parsing(file) for file in fa_files]
     sample_names = np.unique([file['sample_name'] for file in data])
-    dir = np.unique([file['dir'] for file in data])
     for sample_name in sample_names:
         pairs = []
         for file in data:
@@ -247,13 +245,12 @@ def main():
             # Merge files for alignment
             subset_pairs = [filename_parsing(file) for file in pairs]
             subset_sample_name = np.unique([file['sample_name'] for file in subset_pairs])[0]
-            subset_sample_dir = np.unique([file['dir'] for file in subset_pairs])[0]
-            merge_name = f'{subset_sample_dir}/{subset_sample_name}.fa'
+            merge_name = f'{dir}/{subset_sample_name}.fa'
             merge_fasta_files(pairs, merge_name)
             
             # Make alignment
             run_clustalw(merge_name)
-            remove_file_by_pattern(subset_sample_dir, 'dnd') # delete .dnd files
+            remove_file_by_pattern(dir, 'dnd') # delete .dnd files
 
             # Make consensus
             aln_name = merge_name[:-2]+"aln" # path to aln file
@@ -265,7 +262,7 @@ def main():
                 # Blastn search for consenus
                 result = run_blastn(consensus_name, database, num_threads=4)
                 blastn_results_processing(data=result, consensus_name=consensus_name,
-                    database=database, dir=subset_sample_dir, qcovus_treshold=80, pident_treshold=95)
+                    database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
                 
             else:
                 # Blastn search for files in pairs independently
