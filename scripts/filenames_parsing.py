@@ -8,6 +8,7 @@ from Bio import AlignIO
 from collections import Counter
 import io
 import glob
+import warnings
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -35,17 +36,28 @@ def list_of_files(dir, extension):
         return subset_of_files
 
 def filename_parsing(file):
-    filename = file.split("/")[-1][:-4] # file name without extension
-    sample_type = file.split("_")[1] # sample type: C - culture, P - plasmid etc.
-    sample_name = file.split("_")[2] # sample name
-    primer = file.split("_")[3] # primer
-    dir = "/".join(file.split("/")[:-1]) # path to directory
-    return {'filename': filename,
-            'sample_type': sample_type,
-            'sample_name': sample_name,
-            'primer': primer,
-            'path': file,
-            'dir': dir}
+    try:
+        filename = file.split("/")[-1][:-4] # file name without extension
+        sample_type = file.split("_")[1] # sample type: C - culture, P - plasmid etc.
+        sample_name = file.split("_")[2] # sample name
+        primer = file.split("_")[3] # primer
+        dir = "/".join(file.split("/")[:-1]) # path to directory
+        return {'filename': filename,
+                'sample_type': sample_type,
+                'sample_name': sample_name,
+                'primer': primer,
+                'path': file,
+                'dir': dir}
+    except IndexError as e:
+        warnings.warn(f"Error parsing filename {file}: {e}")
+        return None
+    except AttributeError as e:
+        warnings.warn(f"Invalid input type for filename {file}: {e}")
+        return None
+    except Exception as e:
+        warnings.warn(f"An unexpected error occurred while parsing filename '{file}': {e}")
+        return None
+        
  
 def ab1_to_fastq(input_ab1, output_fq):
     record = SeqIO.read(input_ab1, "abi")
@@ -222,8 +234,8 @@ def main():
 
     # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
-    data = [filename_parsing(file) for file in ab1_files] # dictionary with files data
-
+    data = [result for file in ab1_files if (result := filename_parsing(file)) is not None] # dictionary with files data
+    
     # Processing by pattern
     # ab1_files =
     # data = 
@@ -251,8 +263,8 @@ def main():
 
     # 2nd cycle - make alignment, build consensus
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
-    data = [filename_parsing(file) for file in fa_files] # filename parsing of all .fa files
-    sample_names = np.unique([file['sample_name'] for file in data]) #  store unique sample names in array
+    data = [result for file in fa_files if (result := filename_parsing(file)) is not None] # filename parsing of all .fa files
+    sample_names = np.unique([file['sample_name'] for file in data if file]) #  store unique sample names in array
 
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
     for sample_name in sample_names:
