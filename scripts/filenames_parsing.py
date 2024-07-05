@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import sys
 import numpy as np
 import pandas as pd
 from Bio import SeqIO
@@ -36,14 +37,14 @@ def list_of_files(dir, extension):
             subset_of_files=[file for file in files if f'.{extension}' in file] # full paths to .ext files
             return subset_of_files
         except FileNotFoundError as e:
-            warnings.warn(f"Directory '{dir}' not found: {e}")
-            return None
+            warnings.warn(f"Directory '{dir}' is not found: {e}")
+            return []
         except PermissionError as e:
             warnings.warn(f"Permission denied for directory '{dir}': {e}")
-            return None
+            return []
         except Exception as e:
             warnings.warn(f"An unexpected error occurred while listing files in directory '{dir}': {e}")
-            None
+            []
 
 def filename_parsing(file):
     try:
@@ -68,7 +69,6 @@ def filename_parsing(file):
         warnings.warn(f"An unexpected error occurred while parsing filename '{file}': {e}")
         return None
         
- 
 def ab1_to_fastq(input_ab1, output_fq):
     record = SeqIO.read(input_ab1, "abi")
     SeqIO.write(record, output_fq, "fastq")
@@ -232,6 +232,13 @@ def blastn_results_processing(data, consensus_name=None, database=None, dir="./"
     
     return taxids
 
+def check_array(arr):
+    try:
+        if not arr:
+            raise ValueError(f"{arr} is empty. Exiting the program.")
+    except ValueError as e:
+        print(e)
+        sys.exit(1)
 
 def main():
     args = parse_arguments()
@@ -245,6 +252,7 @@ def main():
     # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
     data = [result for file in ab1_files if (result := filename_parsing(file)) is not None] # dictionary with files data
+    check_array(data)
     
     # Processing by pattern
     # ab1_files =
