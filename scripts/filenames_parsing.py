@@ -229,23 +229,22 @@ def main():
 
     # 2nd cycle - make alignment, build consensus
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
-    data = [filename_parsing(file) for file in fa_files]
-    sample_names = np.unique([file['sample_name'] for file in data])
+    data = [filename_parsing(file) for file in fa_files] # filename parsing of all .fa files
+    sample_names = np.unique([file['sample_name'] for file in data]) #  store unique sample names in array
     for sample_name in sample_names:
-        pairs = []
+        pairs = [] # store path to .fa files with the identical sample names (to build consensus) in array
         for file in data:
             if file['sample_name'] == sample_name:
                 pairs.append(file['path'])
-        length = len(pairs)
-    
+        length = len(pairs) # check how much files have the unique sample name: 1 or more then one
         if length == 1:
-            # blast
-            pass
+            # Blastn search for file
+            result = run_blastn(pairs[0], database, num_threads=4)
+            blastn_results_processing(data=result, consensus_name=pairs[0],
+                    database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
         else:
             # Merge files for alignment
-            subset_pairs = [filename_parsing(file) for file in pairs]
-            subset_sample_name = np.unique([file['sample_name'] for file in subset_pairs])[0]
-            merge_name = f'{dir}/{subset_sample_name}.fa'
+            merge_name = f'{dir}/{sample_name}.fa'
             merge_fasta_files(pairs, merge_name)
             
             # Make alignment
