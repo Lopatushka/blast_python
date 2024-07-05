@@ -147,7 +147,13 @@ def run_blastn(input_file, database, num_threads=4):
         -outfmt "6 qseqid sacc staxid evalue pident mismatch gaps qcovus length sscinames"'
     p1 = subprocess.run(command, stdout=subprocess.PIPE,
                    stderr=subprocess.PIPE, check=True, shell = True, text=True)
-    return p1.stdout 
+    return p1.stdout
+
+def run_blastn_alignments(input_file, database, hits, num_threads=4):
+    command = f'blastn -query {input_file} -db {database} -num_threads {num_threads} -taxids {hits} -outfmt 0'
+    p1 = subprocess.run(command, stdout=subprocess.PIPE,
+                   stderr=subprocess.PIPE, check=True, shell = True, text=True)
+    return p1.stdout
 
 def blastn_results_processing(data, consensus_name=None, database=None, dir="./", qcovus_treshold=80, pident_treshold=95):
     df = pd.read_csv(io.StringIO(data), index_col=False, header = None, sep = "\t",
@@ -188,6 +194,12 @@ def blastn_results_processing(data, consensus_name=None, database=None, dir="./"
     
     if os.path.exists(output_file_tmp): # remove tmp file
         os.remove(output_file_tmp)
+
+def hits_taxids(data):
+    df = pd.read_csv(io.StringIO(data), index_col=False, header = None, sep = "\t",
+                     names = ["qseqid", "sacc", "staxid", "evalue", "pident", "mismatch", "gaps", "qcovus", "length", "sscinames"])
+    taxids = ','.join(map(str, list(df["staxid"])))
+    return taxids
 
 def main():
     args = parse_arguments()
@@ -239,7 +251,7 @@ def main():
             if file['sample_name'] == sample_name:
                 pairs.append(file['path'])
         length = len(pairs)
-        
+
         # Check how much files have the unique sample name: 0, 1 or more then one
         if length == 0:
             pass
