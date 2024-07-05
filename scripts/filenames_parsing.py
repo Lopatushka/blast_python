@@ -259,7 +259,8 @@ def main():
             result = run_blastn(pairs[0], database, num_threads=4)
             hits = blastn_results_processing(data=result, consensus_name=pairs[0],
                     database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
-            print(hits)
+            blast_aln = f'{dir}/blast_aln_{sample_name}.txt' # path to blastn_aln file
+            run_blastn_alignments(input_file=pairs[0], output_file=blast_aln, database=database, hits=hits, num_threads=4)
             
         else:
             # Merge files for alignment
@@ -279,8 +280,10 @@ def main():
             if check_consensus_quality(consensus_name, threshold = 15):
                 # Blastn search for consenus
                 result = run_blastn(consensus_name, database, num_threads=4)
-                blastn_results_processing(data=result, consensus_name=consensus_name,
+                hits = blastn_results_processing(data=result, consensus_name=consensus_name,
                     database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
+                blast_aln = f'{dir}/blast_aln_{sample_name}.txt' # path to blastn_aln file
+                run_blastn_alignments(input_file=consensus_name, output_file=blast_aln, database=database, hits=hits, num_threads=4)
                 
             else:
                 # Blastn search for files in pairs independently
