@@ -287,11 +287,13 @@ def main():
                 
             else:
                 # Blastn search for files in pairs independently
-                pass
-
-            #print(pairs, length)
-
-        
+                for file in pairs:
+                    result = run_blastn(file, database, num_threads=4)
+                    hits = blastn_results_processing(data=result, consensus_name=consensus_name,
+                        database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
+                    blast_aln = file[:-2] + 'txt' # path to blastn_aln file
+                    run_blastn_alignments(input_file=file, output_file=blast_aln, database=database, hits=hits, num_threads=4)
+       
         pairs = []
 
 
