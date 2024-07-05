@@ -7,6 +7,7 @@ from Bio import SeqIO
 from Bio import AlignIO
 from collections import Counter
 import io
+import glob
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -73,8 +74,13 @@ def reverse_complement_fasta(input_fasta, output_fasta):
             SeqIO.write(record_rc, f, "fasta")
 
 def remove_file_by_pattern(dir, pattern):
-    command = f'rm {dir}/*{pattern}*'
-    subprocess.run(command, capture_output=True, check=True, shell=True)
+    path = os.path.join(dir, pattern)
+    matching_files = glob.glob(path)
+    if matching_files:
+        for file in matching_files:
+            subprocess.run(['rm', file], check=True)
+    else:
+        pass
 
 def remove_file(path_to_file):
     command = f'rm -f {path_to_file}'
@@ -128,7 +134,7 @@ def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.7):
             consensus.append(iupac_code)
     consensus_seq = ''.join(consensus) # make a string
     consensus_name = aln_file.split("/")[-1][:-4]
-    with open(consensus_fa, "w") as f:
+    with open(consensus_fa, "w") as f: # save in fasta format
         f.write(f'>{consensus_name}_consensus' + "\n")
         f.write(consensus_seq)
 
@@ -230,7 +236,7 @@ def main():
         # Convert trimmed fastq file to fasta file
         fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
         fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
-        remove_file_by_pattern(file['dir'], pattern=".fq") # remove .fq files
+        remove_file_by_pattern(file['dir'], pattern="*.fq") # remove .fq files
 
         # Make reverse complement if primer is reverse
         if "R" in file['primer']:
@@ -269,7 +275,7 @@ def main():
             
             # Make alignment
             run_clustalw(merge_name)
-            remove_file_by_pattern(dir, 'dnd') # delete .dnd files
+            remove_file_by_pattern(dir, '*.dnd') # delete .dnd files
 
             # Make consensus
             aln_name = merge_name[:-2]+"aln" # path to aln file
