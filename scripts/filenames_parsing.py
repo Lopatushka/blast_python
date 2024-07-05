@@ -231,14 +231,20 @@ def main():
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
     data = [filename_parsing(file) for file in fa_files] # filename parsing of all .fa files
     sample_names = np.unique([file['sample_name'] for file in data]) #  store unique sample names in array
+
+    # Store paths to .fa files with the identical sample names in array to build consensus if possible
     for sample_name in sample_names:
-        pairs = [] # store path to .fa files with the identical sample names (to build consensus) in array
+        pairs = [] 
         for file in data:
             if file['sample_name'] == sample_name:
                 pairs.append(file['path'])
-        length = len(pairs) # check how much files have the unique sample name: 1 or more then one
-        if length == 1:
-            # Blastn search for file
+        length = len(pairs)
+        
+        # Check how much files have the unique sample name: 0, 1 or more then one
+        if length == 0:
+            pass
+        elif length == 1:
+            # Blastn search for 1 file
             result = run_blastn(pairs[0], database, num_threads=4)
             blastn_results_processing(data=result, consensus_name=pairs[0],
                     database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
