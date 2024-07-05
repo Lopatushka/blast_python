@@ -2,14 +2,14 @@ import argparse
 import os
 import subprocess
 import sys
+import io
+import glob
+import warnings
 import numpy as np
 import pandas as pd
 from Bio import SeqIO
 from Bio import AlignIO
 from collections import Counter
-import io
-import glob
-import warnings
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -260,7 +260,7 @@ def main():
     # ab1_files =
     # data = 
 
-    # 1st cycle - trimming, make revese complement
+    '''1st cycle - trimming, make revese complement'''
     for file in data:
         # Generation of fastq files
         fq = file["path"][:-3]+"fq" # path to fastq file
@@ -281,7 +281,7 @@ def main():
             reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
             remove_file(fa_trimmed) # remove original fasta file
 
-    # 2nd cycle - make alignment, build consensus
+    '''2nd cycle - make alignment, build consensus, blast'''
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
     is_empty(fa_files)
 
@@ -289,6 +289,7 @@ def main():
     is_empty(data)
 
     sample_names = np.unique([file['sample_name'] for file in data if file]) #  store unique sample names in array
+    is_empty(sample_names)
 
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
     for sample_name in sample_names:
@@ -299,8 +300,9 @@ def main():
         length = len(pairs)
 
         # Check how much files have the unique sample name: 0, 1 or more then one
-        if length == 0:
-            pass
+        if length == 0: # in theory it is impossible situation
+            warnings.warn(f"There is no files with the sample name {sample_name}")
+            
         elif length == 1:
             # Blastn search for 1 file
             result = run_blastn(pairs[0], database, num_threads=4)
