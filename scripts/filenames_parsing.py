@@ -264,7 +264,8 @@ def main():
             if check_consensus_quality(consensus_name, threshold = 15):
                 # Blastn search for consenus
                 result = run_blastn(consensus_name, database, num_threads=4)
-                #blastn_results_processing(result, consensus_name = consensus, dir = dir, qcovus_treshold=80, pident_treshold=95)
+                blastn_results_processing(data=result, consensus_name=consensus_name,
+                    database=database, dir=subset_sample_dir, qcovus_treshold=80, pident_treshold=95)
                 
             else:
                 # Blastn search for files in pairs independently
