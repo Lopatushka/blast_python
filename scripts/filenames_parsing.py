@@ -178,6 +178,10 @@ def blastn_results_processing(data, consensus_name=None, database=None, dir="./"
     df["pident"] = np.round(df["pident"], 3) # Round pident
     df = df.sort_values(by='pident', ascending=False) # Sort df by pident
     df = df[~(df["sscinames"].duplicated(keep='first'))] # Delete duplications of sscinames. Keep first occurences only
+    
+    # Get taxids of hits
+    taxids = ','.join(map(str, list(df["staxid"])))
+
     # Save results
     output_file_tmp = dir + "/tmp.tsv"
     output_file = dir + "/blastn.tsv"
@@ -192,12 +196,9 @@ def blastn_results_processing(data, consensus_name=None, database=None, dir="./"
     
     if os.path.exists(output_file_tmp): # remove tmp file
         os.remove(output_file_tmp)
-
-def hits_taxids(data):
-    df = pd.read_csv(io.StringIO(data), index_col=False, header = None, sep = "\t",
-                     names = ["qseqid", "sacc", "staxid", "evalue", "pident", "mismatch", "gaps", "qcovus", "length", "sscinames"])
-    taxids = ','.join(map(str, list(df["staxid"])))
+    
     return taxids
+
 
 def main():
     args = parse_arguments()
@@ -256,9 +257,10 @@ def main():
         elif length == 1:
             # Blastn search for 1 file
             result = run_blastn(pairs[0], database, num_threads=4)
-            blastn_results_processing(data=result, consensus_name=pairs[0],
+            hits = blastn_results_processing(data=result, consensus_name=pairs[0],
                     database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
-            hits = hits_taxids()
+            print(hits)
+            
         else:
             # Merge files for alignment
             merge_name = f'{dir}/{sample_name}.fa'
