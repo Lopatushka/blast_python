@@ -44,7 +44,7 @@ def list_of_files(dir, extension):
             return []
         except Exception as e:
             warnings.warn(f"An unexpected error occurred while listing files in directory '{dir}': {e}")
-            []
+            return []
 
 def filename_parsing(file):
     try:
@@ -61,13 +61,13 @@ def filename_parsing(file):
                 'dir': dir}
     except IndexError as e:
         warnings.warn(f"Error parsing filename {file}: {e}")
-        return None
+        return {}
     except AttributeError as e:
         warnings.warn(f"Invalid input type for filename {file}: {e}")
-        return None
+        return {}
     except Exception as e:
         warnings.warn(f"An unexpected error occurred while parsing filename '{file}': {e}")
-        return None
+        return {}
         
 def ab1_to_fastq(input_ab1, output_fq):
     record = SeqIO.read(input_ab1, "abi")
@@ -232,10 +232,10 @@ def blastn_results_processing(data, consensus_name=None, database=None, dir="./"
     
     return taxids
 
-def check_array(arr):
+def is_empty(data):
     try:
-        if not arr:
-            raise ValueError(f"{arr} is empty. Exiting the program.")
+        if not data:
+            raise ValueError(f"{data} is empty. Exiting the program.")
     except ValueError as e:
         print(e)
         sys.exit(1)
@@ -251,10 +251,10 @@ def main():
 
     # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
-    check_array(ab1_files)
-    
-    data = [result for file in ab1_files if (result := filename_parsing(file)) is not None] # dictionary with files data
-    check_array(data)
+    is_empty(ab1_files)
+
+    data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
+    is_empty(data)
     
     # Processing by pattern
     # ab1_files =
@@ -283,10 +283,10 @@ def main():
 
     # 2nd cycle - make alignment, build consensus
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
-    check_array(fa_files)
+    is_empty(fa_files)
 
-    data = [result for file in fa_files if (result := filename_parsing(file)) is not None] # filename parsing of all .fa files
-    check_array(data)
+    data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
+    is_empty(data)
 
     sample_names = np.unique([file['sample_name'] for file in data if file]) #  store unique sample names in array
 
