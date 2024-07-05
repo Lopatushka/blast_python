@@ -251,6 +251,8 @@ def main():
 
     # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
+    check_array(ab1_files)
+    
     data = [result for file in ab1_files if (result := filename_parsing(file)) is not None] # dictionary with files data
     check_array(data)
     
@@ -281,7 +283,11 @@ def main():
 
     # 2nd cycle - make alignment, build consensus
     fa_files = list_of_files(dir, "fa") # full paths to .fa files
+    check_array(fa_files)
+
     data = [result for file in fa_files if (result := filename_parsing(file)) is not None] # filename parsing of all .fa files
+    check_array(data)
+
     sample_names = np.unique([file['sample_name'] for file in data if file]) #  store unique sample names in array
 
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
