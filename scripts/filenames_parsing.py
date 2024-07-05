@@ -27,13 +27,23 @@ def parse_arguments():
     return parser.parse_args()
 
 def list_of_files(dir, extension):
-        files = []
-        for item in os.listdir(dir):
-            path=os.path.join(dir, item)
-            if os.path.isfile(path):
-                files.append(path)
-        subset_of_files=[file for file in files if f'.{extension}' in file] # full paths to .ext files
-        return subset_of_files
+        try:
+            files = []
+            for item in os.listdir(dir):
+                path=os.path.join(dir, item)
+                if os.path.isfile(path):
+                    files.append(path)
+            subset_of_files=[file for file in files if f'.{extension}' in file] # full paths to .ext files
+            return subset_of_files
+        except FileNotFoundError as e:
+            warnings.warn(f"Directory '{dir}' not found: {e}")
+            return None
+        except PermissionError as e:
+            warnings.warn(f"Permission denied for directory '{dir}': {e}")
+            return None
+        except Exception as e:
+            warnings.warn(f"An unexpected error occurred while listing files in directory '{dir}': {e}")
+            None
 
 def filename_parsing(file):
     try:
