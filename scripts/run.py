@@ -259,11 +259,7 @@ def get_variable_name(variable):
 
 def is_empty(data):
     if not data:
-        varname = get_variable_name(data)
-        if len(varname) == 1:
-            raise ValueError(f"Variable {varname} is empty. Exiting the program.")
-        else:
-            raise ValueError(f"Variables: {', '.join(varname)} are empty. Exiting the program.")
+        raise ValueError(f"Variable {data} is empty. Exiting the program.")
 
 def check_1_file_exists(file_path):
     if not os.path.isfile(file_path):
