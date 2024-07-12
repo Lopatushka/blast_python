@@ -325,8 +325,10 @@ def main():
 
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
     is_empty(data)
-    # add to report - probe type, primer
-    
+
+    # Add info to report dataframe
+    report = pd.DataFrame(data)
+         
     '''1st cycle - trimming, make revese complement'''
     for file in data:
         # Generation of fastq files
@@ -339,7 +341,9 @@ def main():
 
         # Convert trimmed fastq file to fasta file if exists
         if os.path.isfile(fq_trimmed):
-            # add to report
+            # Add info to report
+            report.loc[report["filename"] == file["filename"], "is_short"] = False
+
             fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
             fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
             remove_file_by_pattern(file['dir'], pattern="*.fq") # remove .fq files
@@ -350,8 +354,10 @@ def main():
                 reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
                 remove_file(fa_trimmed) # remove original fasta file
         else:
-            # add to report
-            pass
+            # Add info to report
+            report.loc[report["filename"] == file["filename"], "is_short"] = True
+    
+    print(report)
 
     '''2nd cycle - make alignment, build consensus, blast'''
     if blastn_mode == "auto":
@@ -410,6 +416,7 @@ def main():
 
             # Check consensus quality
             if check_consensus_quality(consensus_name, threshold = consensus_quality):
+                # add to report
                 # Blastn search for consenus
                 result = run_blastn(consensus_name, database, num_threads=nthreads)
                 hits = blastn_results_processing(data=result, consensus_name=consensus_name,
@@ -420,6 +427,7 @@ def main():
                                       database=database, hits=hits, num_threads=nthreads)
                 
             else:
+                # add to report
                 # Blastn search for files in pairs independently
                 for file in pairs:
                     result = run_blastn(file, database, num_threads=nthreads)
