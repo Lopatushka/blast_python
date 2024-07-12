@@ -17,6 +17,7 @@ def parse_arguments():
     parser.add_argument('--directory', '-d', type=str, default=".", help='Directory containing .ab1 files')
     parser.add_argument('--blastn_mode', '-bm', type=str, default="auto", help='Balstn search mode. Options: auto (default), manual')
     parser.add_argument('--consensus_patterns', '-p', nargs='*', type=str, default=list())
+    parser.add_argument('consensus_quality', '-cq', type=int, default=15, help="Maximum percetage of 'N' in consensus")
     parser.add_argument('--nthreads', '-nt', type=int, default=4, help='Number of threads for blastn search')
     parser.add_argument('--trimming_quality', '-tq', type=int, default=15, help='Trimming quality')
     parser.add_argument('--minlength', '-ml', type=int, default=50, help='Minimum length of consensus')
@@ -281,6 +282,7 @@ def main():
     dir = args.input_directory
     blastn_mode = args.blastn_mode
     consensus_patterns = args.consensus_patterns
+    consensus_quality = args.consensus_quality
     nthreads = args.nthreads
     trimming_quality = args.trimming_quality
     minlength = args.minlength
