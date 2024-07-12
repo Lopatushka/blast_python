@@ -414,7 +414,9 @@ def main():
 
             # Check consensus quality
             if check_consensus_quality(consensus_name, threshold = consensus_quality):
-                # add to report
+                # Add info to report
+                report.loc[report["sample_name"] == sample_name, "is_consensus"] = True
+
                 # Blastn search for consenus
                 result = run_blastn(consensus_name, database, num_threads=nthreads)
                 hits = blastn_results_processing(data=result, consensus_name=consensus_name,
@@ -425,7 +427,9 @@ def main():
                                       database=database, hits=hits, num_threads=nthreads)
                 
             else:
-                # add to report
+                # Add info to report
+                report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
+
                 # Blastn search for files in pairs independently
                 for file in pairs:
                     result = run_blastn(file, database, num_threads=nthreads)
@@ -450,6 +454,10 @@ def main():
     move_files(dir + "/fasta", fa_files)
     move_files(dir + "/consensus_alns", aln_files)
     move_files(dir + "/blast_alns", txt_files)
+
+    # Save report as .tsv
+    report = report.drop(columns=["filename", "path", "dir"]) # delete unnessesary cols
+    report.to_csv(dir + "/report.tsv", sep='\t', index=False, header=True, mode="w")
 
 
 if __name__ == "__main__":
