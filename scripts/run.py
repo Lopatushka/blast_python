@@ -164,7 +164,7 @@ def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.7):
         f.write(f'>{consensus_name}_consensus' + "\n")
         f.write(consensus_seq)
 
-def check_consensus_quality(fasta, threshold = 15):
+def check_consensus_quality(fasta, threshold):
     consensus = SeqIO.read(fasta, "fasta")
     consensus_length = len(consensus.seq)
     N_count = consensus.count("N")
@@ -174,18 +174,18 @@ def check_consensus_quality(fasta, threshold = 15):
     else:
         return True # good consensus
 
-def run_blastn(input_file, database, num_threads=4):
+def run_blastn(input_file, database, num_threads):
     command = f'blastn -query {input_file} -db {database} -num_threads {num_threads}\
         -outfmt "6 qseqid sacc staxid evalue pident mismatch gaps qcovus length sscinames"'
     p1 = subprocess.run(command, stdout=subprocess.PIPE,
                    stderr=subprocess.PIPE, check=True, shell = True, text=True)
     return p1.stdout
 
-def run_blastn_alignments(input_file, output_file, database, hits, num_threads=4):
+def run_blastn_alignments(input_file, output_file, database, hits, num_threads):
     command = f'blastn -query {input_file} -db {database} -num_threads {num_threads} -taxids {hits} -outfmt 0 -out {output_file}'
     subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell = True, text=True)
 
-def blastn_results_processing(data, consensus_name=None, database=None, dir="./", qcovus_treshold=80, pident_treshold=95):
+def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_name=None, database=None, dir="./"):
     # check axualiry files presence
     wd = os.getcwd() # working dir
     check_files_exist([wd + '/taxdb.btd', wd + '/taxdb.bti', wd + '/taxonomy4blast.sqlite3'])
