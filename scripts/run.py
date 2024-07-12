@@ -457,7 +457,7 @@ def main():
 
     # Save report as .tsv
     report = report.drop(columns=["filename", "path", "dir"]) # delete unnessesary cols
-    report.to_csv(dir + "/report.tsv", sep='\t', index=False, header=True, mode="w")
+    report.to_csv(dir + "/report.tsv", sep='\t', index=False, header=True, mode="a")
 
 
 if __name__ == "__main__":
