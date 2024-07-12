@@ -307,7 +307,7 @@ def main():
 
         # Trimming fastq files
         fq_trimmed = fq[:-3] + "_trimmed.fq" # path to trimmed fastq file
-        run_bbduk(fq, fq_trimmed, trimq = 15, minlength = 50)
+        run_bbduk(fq, fq_trimmed, trimq = trimming_quality, minlength = minlength)
 
         # Convert trimmed fastq file to fasta file
         fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
@@ -352,9 +352,11 @@ def main():
             # Blastn search for 1 file
             result = run_blastn(pairs[0], database, num_threads=4)
             hits = blastn_results_processing(data=result, consensus_name=pairs[0],
-                    database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
+                                            database=database, dir=dir,
+                                            qcovus_treshold=qcovus, pident_treshold=pident)
             blast_aln = f'{dir}/blast_aln_{sample_name}.txt' # path to blastn_aln file
-            run_blastn_alignments(input_file=pairs[0], output_file=blast_aln, database=database, hits=hits, num_threads=4)
+            run_blastn_alignments(input_file=pairs[0], output_file=blast_aln,
+                                  database=database, hits=hits, num_threads=nthreads)
             
         else:
             # Merge files for alignment
@@ -371,22 +373,26 @@ def main():
             get_custom_consensus_from_aln(aln_name, consensus_name, threshold=0.7)
 
             # Check consensus quality
-            if check_consensus_quality(consensus_name, threshold = 15):
+            if check_consensus_quality(consensus_name, threshold = consensus_quality):
                 # Blastn search for consenus
-                result = run_blastn(consensus_name, database, num_threads=4)
+                result = run_blastn(consensus_name, database, num_threads=nthreads)
                 hits = blastn_results_processing(data=result, consensus_name=consensus_name,
-                    database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
+                                                database=database, dir=dir,
+                                                qcovus_treshold=qcovus, pident_treshold=pident)
                 blast_aln = f'{dir}/blast_aln_{sample_name}.txt' # path to blastn_aln file
-                run_blastn_alignments(input_file=consensus_name, output_file=blast_aln, database=database, hits=hits, num_threads=4)
+                run_blastn_alignments(input_file=consensus_name, output_file=blast_aln,
+                                      database=database, hits=hits, num_threads=nthreads)
                 
             else:
                 # Blastn search for files in pairs independently
                 for file in pairs:
-                    result = run_blastn(file, database, num_threads=4)
+                    result = run_blastn(file, database, num_threads=nthreads)
                     hits = blastn_results_processing(data=result, consensus_name=consensus_name,
-                        database=database, dir=dir, qcovus_treshold=80, pident_treshold=95)
+                                                    database=database, dir=dir,
+                                                    qcovus_treshold=qcovus, pident_treshold=pident)
                     blast_aln = file[:-2] + 'txt' # path to blastn_aln file
-                    run_blastn_alignments(input_file=file, output_file=blast_aln, database=database, hits=hits, num_threads=4)
+                    run_blastn_alignments(input_file=file, output_file=blast_aln,
+                                          database=database, hits=hits, num_threads=nthreads)
        
         pairs = []
 
