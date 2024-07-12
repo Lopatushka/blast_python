@@ -356,8 +356,6 @@ def main():
         else:
             # Add info to report
             report.loc[report["filename"] == file["filename"], "is_short"] = True
-    
-    print(report)
 
     '''2nd cycle - make alignment, build consensus, blast'''
     if blastn_mode == "auto":
@@ -388,7 +386,7 @@ def main():
             
         elif length == 1:
             # Blastn search for 1 file
-            result = run_blastn(pairs[0], database, num_threads=4)
+            result = run_blastn(pairs[0], database, num_threads=nthreads)
             hits = blastn_results_processing(data=result, consensus_name=pairs[0],
                                             database=database, dir=dir,
                                             qcovus_treshold=qcovus, pident_treshold=pident)
