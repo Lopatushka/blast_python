@@ -325,6 +325,7 @@ def main():
 
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
     is_empty(data)
+    # add to report - probe type, primer
     
     '''1st cycle - trimming, make revese complement'''
     for file in data:
@@ -338,7 +339,7 @@ def main():
 
         # Convert trimmed fastq file to fasta file if exists
         if os.path.isfile(fq_trimmed):
-            # add in to report
+            # add to report
             fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
             fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
             remove_file_by_pattern(file['dir'], pattern="*.fq") # remove .fq files
@@ -349,7 +350,7 @@ def main():
                 reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
                 remove_file(fa_trimmed) # remove original fasta file
         else:
-            # add in to report
+            # add to report
             pass
 
     '''2nd cycle - make alignment, build consensus, blast'''
@@ -393,6 +394,10 @@ def main():
             # Merge files for alignment
             merge_name = f'{dir}/{sample_name}.fa'
             merge_fasta_files(pairs, merge_name)
+
+            # Remove original files after merging to a single file
+            for item in pairs:
+                remove_file(item)
             
             # Make alignment
             run_clustalw(merge_name)
