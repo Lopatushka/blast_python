@@ -247,7 +247,7 @@ def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_
 
 def get_variable_name(variable):
      frame = inspect.currentframe()
-     caller_frame = frame.f_back
+     caller_frame = frame.f_back.f_back
      local_vars = caller_frame.f_locals
      varname = [key for key, value in local_vars.items() if value == variable]
      if len(varname) == 0:
@@ -258,13 +258,12 @@ def get_variable_name(variable):
         return varname
 
 def is_empty(data):
-    try:
-        if not data:
-            varname = get_variable_name(data)
-            raise ValueError(f"{varname} is empty. Exiting the program.")
-    except ValueError as e:
-        print(e)
-        sys.exit(1)
+    if not data:
+        varname = get_variable_name(data)
+        if len(varname) == 1:
+            raise ValueError(f"Variable {varname} is empty. Exiting the program.")
+        else:
+            raise ValueError(f"Variables: {', '.join(varname)} are empty. Exiting the program.")
 
 def check_1_file_exists(file_path):
     if not os.path.isfile(file_path):
