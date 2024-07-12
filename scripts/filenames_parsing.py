@@ -1,5 +1,6 @@
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 import io
@@ -252,28 +253,33 @@ def check_files_exist(file_paths_list):
     for filepath in file_paths_list:
         check_1_file_exists(filepath)
 
+def create_dir(new_directory):
+    if not os.path.exists(new_directory):
+        os.makedirs(new_directory)
+
+def move_files(dir, files):
+    for file in files:
+        if os.path.isfile(file):
+            shutil.move(file, dir)
+
 def main():
     args = parse_arguments()
     #dir = args.input_directory
     #mode = args.files_processing_mode
     #if mode == "auto":
 
-    dir = "/home/lopatushka/blast/data/100424"
     #dir = "../blast/data/101424" # directory there all files are stored (ab1, fq, fa, aln)
     #database = '../db_16S_ribosomal_RNA/16S_ribosomal_RNA' # path to blastn database
+
+    dir = "/home/lopatushka/blast/data/100424"
     database = '/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA'
 
-    # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
     is_empty(ab1_files)
 
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
     is_empty(data)
     
-    # Processing by pattern
-    # ab1_files =
-    # data = 
-
     '''1st cycle - trimming, make revese complement'''
     for file in data:
         # Generation of fastq files
@@ -359,6 +365,18 @@ def main():
        
         pairs = []
 
+    # Create new dirs and move files with special extensions to these dirs
+    fa_files = list_of_files(dir, "fa") # full paths to fa files
+    aln_files = list_of_files(dir, "aln") # full paths to aln files
+    txt_files = list_of_files(dir, "txt") # full paths to txt files
+
+    create_dir(dir + "/fasta")
+    create_dir(dir + "/consensus_alns")
+    create_dir(dir + "/blast_alns")
+
+    move_files(dir + "/fasta", fa_files)
+    move_files(dir + "/consensus_alns", aln_files)
+    move_files(dir + "/blast_alns", txt_files)
 
 
 if __name__ == "__main__":
