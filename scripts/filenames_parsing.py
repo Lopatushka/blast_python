@@ -120,7 +120,7 @@ def merge_fasta_files(input_fasta_files, output_fasta):
             SeqIO.write(records, output_handle, "fasta")
 
 def run_clustalw(input_fasta):
-    command = f'clustalw2 {input_fasta}'
+    command = f'clustalw2 -INFILE={input_fasta}'
     subprocess.run(command, capture_output=True, check=True, shell = True)
 
 def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.7):
@@ -187,6 +187,10 @@ def run_blastn_alignments(input_file, output_file, database, hits, num_threads=4
     subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell = True, text=True)
 
 def blastn_results_processing(data, consensus_name=None, database=None, dir="./", qcovus_treshold=80, pident_treshold=95):
+    # check axualiry files presence
+    wd = os.getcwd() # working dir
+    check_files_exist([wd + '/taxdb.btd', wd + '/taxdb.bti', wd + '/taxonomy4blast.sqlite3'])
+
     df = pd.read_csv(io.StringIO(data), index_col=False, header = None, sep = "\t",
                      names = ["qseqid", "sacc", "staxid", "evalue", "pident", "mismatch", "gaps", "qcovus", "length", "sscinames"])
     df["sscinames"] = df["sscinames"].str.split(" ").apply(lambda x: [str(x)] if isinstance(x, float) else x).apply(lambda x: x[:2]).apply(lambda x: " ".join(x))     
@@ -240,14 +244,24 @@ def is_empty(data):
         print(e)
         sys.exit(1)
 
+def check_1_file_exists(file_path):
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"The file {file_path} does not exist.")
+    
+def check_files_exist(file_paths_list):
+    for filepath in file_paths_list:
+        check_1_file_exists(filepath)
+
 def main():
     args = parse_arguments()
     #dir = args.input_directory
     #mode = args.files_processing_mode
     #if mode == "auto":
 
-    dir = "../blast/data/101424" # directory there all files are stored (ab1, fq, fa, aln)
-    database = '../db_16S_ribosomal_RNA/16S_ribosomal_RNA' # path to blastn database
+    dir = "/home/lopatushka/blast/data/100424"
+    #dir = "../blast/data/101424" # directory there all files are stored (ab1, fq, fa, aln)
+    #database = '../db_16S_ribosomal_RNA/16S_ribosomal_RNA' # path to blastn database
+    database = '/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA'
 
     # Bulk processing
     ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
@@ -288,7 +302,7 @@ def main():
     data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
     is_empty(data)
 
-    sample_names = np.unique([file['sample_name'] for file in data if file]) #  store unique sample names in array
+    sample_names = np.unique([file['sample_name'] for file in data if file]).tolist() #  store unique sample names in array
     is_empty(sample_names)
 
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
