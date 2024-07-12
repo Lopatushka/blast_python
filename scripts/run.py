@@ -26,6 +26,15 @@ def parse_arguments():
     parser.add_argument('--pident', '-pi', type=int, default=95, help='Percent of identity threshold')
     return parser.parse_args()
 
+def list_of_files_by_pattern(dir, extension, patterns):
+    files = list_of_files(dir, extension=extension) # get all files with reqired extension
+    files_to_process = []
+    for pattern in patterns:
+        for file in files:
+            if pattern in file:
+                files_to_process.append(file)
+    return files_to_process
+
 def list_of_files(dir, extension):
         try:
             files = []
