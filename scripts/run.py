@@ -11,6 +11,7 @@ import pandas as pd
 from Bio import SeqIO
 from Bio import AlignIO
 from collections import Counter
+import inspect
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -245,11 +246,16 @@ def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_
     return taxids
 
 def get_variable_name(variable):
-    context = globals()
-    for name, value in context.items():
-        if value is variable:
-            return name
-    return None
+     frame = inspect.currentframe()
+     caller_frame = frame.f_back
+     local_vars = caller_frame.f_locals
+     varname = [key for key, value in local_vars.items() if value == variable]
+     if len(varname) == 0:
+          return None
+     elif len(varname) == 1:
+          return varname[0]
+     else:
+        return varname
 
 def is_empty(data):
     try:
