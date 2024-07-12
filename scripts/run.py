@@ -336,16 +336,21 @@ def main():
         fq_trimmed = fq[:-3] + "_trimmed.fq" # path to trimmed fastq file
         run_bbduk(fq, fq_trimmed, trimq = trimming_quality, minlength = minlength)
 
-        # Convert trimmed fastq file to fasta file
-        fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
-        fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
-        remove_file_by_pattern(file['dir'], pattern="*.fq") # remove .fq files
+        # Convert trimmed fastq file to fasta file if exists
+        if os.path.isfile(fq_trimmed):
+            # add in to report
+            fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
+            fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
+            remove_file_by_pattern(file['dir'], pattern="*.fq") # remove .fq files
 
-        # Make reverse complement if primer is reverse
-        if "R" in file['primer']:
-            fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
-            reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
-            remove_file(fa_trimmed) # remove original fasta file
+            # Make reverse complement if primer is reverse
+            if "R" in file['primer']:
+                fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
+                reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
+                remove_file(fa_trimmed) # remove original fasta file
+        else:
+            # add in to report
+            pass
 
     '''2nd cycle - make alignment, build consensus, blast'''
     if blastn_mode == "auto":
