@@ -26,15 +26,6 @@ def parse_arguments():
     parser.add_argument('--pident', '-pi', type=int, default=95, help='Percent of identity threshold')
     return parser.parse_args()
 
-def list_of_files_by_pattern(dir, extension, patterns):
-    files = list_of_files(dir, extension=extension) # get all files with reqired extension
-    files_to_process = []
-    for pattern in patterns:
-        for file in files:
-            if pattern in file:
-                files_to_process.append(file)
-    return files_to_process
-
 def list_of_files(dir, extension):
         try:
             files = []
@@ -53,6 +44,15 @@ def list_of_files(dir, extension):
         except Exception as e:
             warnings.warn(f"An unexpected error occurred while listing files in directory '{dir}': {e}")
             return []
+
+def list_of_files_by_pattern(dir, extension, patterns):
+    files = list_of_files(dir, extension=extension) # get all files with reqired extension
+    files_to_process = []
+    for pattern in patterns:
+        for file in files:
+            if pattern in file:
+                files_to_process.append(file)
+    return files_to_process
 
 def filename_parsing(file):
     try:
@@ -244,10 +244,18 @@ def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_
     
     return taxids
 
+def get_variable_name(variable):
+    context = globals()
+    for name, value in context.items():
+        if value is variable:
+            return name
+    return None
+
 def is_empty(data):
     try:
         if not data:
-            raise ValueError(f"{data} is empty. Exiting the program.")
+            varname = get_variable_name(data)
+            raise ValueError(f"{varname} is empty. Exiting the program.")
     except ValueError as e:
         print(e)
         sys.exit(1)
@@ -335,10 +343,8 @@ def main():
         is_empty(fa_files)
     
     elif blastn_mode == "manual":
-        #fa_files = filenames_patterns
-        #is_empty(fa_files)
-        pass
-
+        fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
+        is_empty(fa_files)
 
     data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
     is_empty(data)
