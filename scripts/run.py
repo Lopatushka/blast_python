@@ -17,9 +17,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
     parser.add_argument('--directory', '-d', type=str, default=".", help='Directory containing .ab1 files')
     parser.add_argument('--parsing_mode', '-pm', type=str, default="auto", choices=["auto", "manual"], help='Filenames parsing mode. Options: auto (default), manual')
-    parser.add_argument('--parsing_patterns', '-pp', nargs='*', type=str, default=list())
+    parser.add_argument('--parsing_patterns', '-pp', nargs='*', type=str, default=list(), help='Unique patterns in filenames of .ab1 files for manual consensus building')
     parser.add_argument('--blastn_mode', '-bm', type=str, default="auto", choices=["auto", "manual"], help='Balstn search mode. Options: auto (default), manual')
-    parser.add_argument('--consensus_patterns', '-cp', nargs='*', type=str, default=list())
+    parser.add_argument('--consensus_patterns', '-cp', nargs='*', type=str, default=list(), help='Unique patterns in filenames of consensuses for manual blastn search')
     parser.add_argument('--consensus_quality', '-cq', type=int, default=15, help="Maximum percetage of 'N' in consensus")
     parser.add_argument('--nthreads', '-nt', type=int, default=4, help='Number of threads for blastn search')
     parser.add_argument('--trimming_quality', '-tq', type=int, default=15, help='Trimming quality')
@@ -301,6 +301,7 @@ def main():
     args = parse_arguments()
     dir = args.directory
     parsing_mode = args.parsing_mode
+    parsing_patterns = args.parsing_patterns
     blastn_mode = args.blastn_mode
     consensus_patterns = args.consensus_patterns
     consensus_quality = args.consensus_quality
