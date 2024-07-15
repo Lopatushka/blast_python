@@ -1,13 +1,6 @@
-import argparse
-import os
-import shutil
-import subprocess
-import sys
-import io
-import glob
-import warnings
-import numpy as np
-import pandas as pd
-from Bio import SeqIO
-from Bio import AlignIO
-from collections import Counter
+from .blastn import *
+from .errors_catching import *
+from .filesystem_navigation import *
+from .get_files import *
+from .make_consensus import *
+from .remove_files import *
