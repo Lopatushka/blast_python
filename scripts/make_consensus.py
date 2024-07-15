@@ -1,3 +1,9 @@
+from Bio import SeqIO
+from Bio import AlignIO
+from collections import Counter
+import subprocess
+import numpy as np
+
 def ab1_to_fastq(input_ab1, output_fq):
     record = SeqIO.read(input_ab1, "abi")
     SeqIO.write(record, output_fq, "fastq")
@@ -22,7 +28,7 @@ def reverse_complement_fasta(input_fasta, output_fasta):
     record_rc.id = record.id
     record_rc.name = record.name
     with open(output_fasta, "w") as f:
-            SeqIO.write(record_rc, f, "fasta")+
+        SeqIO.write(record_rc, f, "fasta")
 
 def merge_fasta_files(input_fasta_files, output_fasta):
     with open(output_fasta, "w") as output_handle:

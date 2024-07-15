@@ -1,3 +1,6 @@
+import os
+import shutil
+
 def create_dir(new_directory):
     if not os.path.exists(new_directory):
         os.makedirs(new_directory)

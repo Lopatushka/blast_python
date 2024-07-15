@@ -1,3 +1,5 @@
+import os
+
 def check_1_file_exists(file_path):
     if not os.path.isfile(file_path):
         raise FileNotFoundError(f"The file {file_path} does not exist.")

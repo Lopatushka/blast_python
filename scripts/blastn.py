@@ -1,3 +1,9 @@
+import os
+import subprocess
+import io
+import numpy as np
+import pandas as pd
+
 def run_blastn(input_file, database, num_threads):
     command = f'blastn -query {input_file} -db {database} -num_threads {num_threads}\
         -outfmt "6 qseqid sacc staxid evalue pident mismatch gaps qcovus length sscinames"'

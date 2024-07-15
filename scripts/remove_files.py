@@ -1,3 +1,7 @@
+import os
+import subprocess
+import glob
+
 def remove_file_by_pattern(dir, pattern):
     path = os.path.join(dir, pattern)
     matching_files = glob.glob(path)

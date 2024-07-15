@@ -1,3 +1,7 @@
+import os
+import argparse
+import warnings
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
     parser.add_argument('--directory', '-d', type=str, default=".", help='Directory containing .ab1 files')
