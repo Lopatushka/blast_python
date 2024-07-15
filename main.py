@@ -14,12 +14,18 @@ def main():
     database = args.database
     qcovus = args.qcovus
     pident = args.pident
-    
+
+    # Check that dir argument is provided
+    try:
+        is_empty_variable(dir, "dir")
+    except ValueError as e:
+        raise ArgumentError("The path to directory with .ab1 fils isn't provided. For details see --help.")
+
     if parsing_mode == "auto":
         ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
     elif parsing_mode == "manual":
         ab1_files = list_of_files_by_pattern(dir=dir, extension="ab1", patterns=parsing_patterns)
-
+    
     is_empty_variable(ab1_files, "ab1_files")
 
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data

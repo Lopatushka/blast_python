@@ -4,7 +4,7 @@ import warnings
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
-    parser.add_argument('--directory', '-d', type=str, default=".", help='Directory containing .ab1 files')
+    parser.add_argument('--directory', '-d', type=str, help='Directory containing .ab1 files')
     parser.add_argument('--parsing_mode', '-pm', type=str, default="auto", choices=["auto", "manual"], help='Filenames parsing mode. Options: auto (default), manual')
     parser.add_argument('--parsing_patterns', '-pp', nargs='*', type=str, default=list(), help='Unique patterns in filenames of .ab1 files for manual consensus building')
     parser.add_argument('--blastn_mode', '-bm', type=str, default="auto", choices=["auto", "manual"], help='Balstn search mode. Options: auto (default), manual')
