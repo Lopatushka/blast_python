@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 def check_1_file_exists(file_path):
     if not os.path.isfile(file_path):
@@ -11,3 +12,6 @@ def check_files_exist(file_paths_list):
 def is_empty(data):
     if not data:
         raise ValueError(f"Variable {data} is empty. Exiting the program.")
+    
+def is_file_empty(file_path):
+    return Path(file_path).stat().st_size == 0
