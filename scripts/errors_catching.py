@@ -13,5 +13,5 @@ def is_empty(data):
     if not data:
         raise ValueError(f"Variable {data} is empty. Exiting the program.")
     
-def is_file_empty(file_path):
-    return Path(file_path).stat().st_size == 0
+def not_empty_file(file_path):
+    return Path(file_path).stat().st_size != 0
