@@ -1,3 +1,5 @@
+from scripts import *
+
 def main():
     args = parse_arguments()
     dir = args.directory
