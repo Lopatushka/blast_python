@@ -9,9 +9,9 @@ def check_files_exist(file_paths_list):
     for filepath in file_paths_list:
         check_1_file_exists(filepath)
 
-def is_empty(data):
-    if not data:
-        raise ValueError(f"Variable {data} is empty. Exiting the program.")
+def is_empty_variable(var, var_name):
+    if not var:
+        raise ValueError(f"Variable {var_name} is empty. Exiting the program.")
     
 def not_empty_file(file_path):
     return Path(file_path).stat().st_size != 0
