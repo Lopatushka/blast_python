@@ -15,9 +15,6 @@ def main():
     qcovus = args.qcovus
     pident = args.pident
     
-    #dir = "/home/lopatushka/blast/data/100424"
-    #database = '/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA'
-
     if parsing_mode == "auto":
         ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
         is_empty(ab1_files)
@@ -42,8 +39,8 @@ def main():
         fq_trimmed = fq[:-3] + "_trimmed.fq" # path to trimmed fastq file
         run_bbduk(fq, fq_trimmed, trimq = trimming_quality, minlength = minlength)
 
-        # Convert trimmed fastq file to fasta file if exists
-        if os.path.isfile(fq_trimmed):
+        # Convert trimmed fastq file to fasta file if exists AND not empty
+        if os.path.isfile(fq_trimmed) and not_empty_file(fq_trimmed):
             # Add info to report
             report.loc[report["filename"] == file["filename"], "is_short"] = False
 
