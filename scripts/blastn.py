@@ -3,6 +3,7 @@ import subprocess
 import io
 import numpy as np
 import pandas as pd
+from .errors_catching import check_files_exist
 
 def run_blastn(input_file, database, num_threads):
     command = f'blastn -query {input_file} -db {database} -num_threads {num_threads}\
