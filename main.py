@@ -26,7 +26,7 @@ def main():
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
     is_empty(data)
 
-    # Add info to report dataframe
+    # Initialize report dataframe
     report = pd.DataFrame(data)
          
     '''1st cycle - trimming, make revese complement'''
@@ -85,6 +85,9 @@ def main():
             warnings.warn(f"There is no files with the sample name {sample_name}")
             
         elif length == 1:
+            # Add info to report
+            report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
+
             # Blastn search for 1 file
             result = run_blastn(pairs[0], database, num_threads=nthreads)
             hits = blastn_results_processing(data=result, consensus_name=pairs[0],
@@ -156,8 +159,8 @@ def main():
     move_files(dir + "/blast_alns", txt_files)
 
     # Save report as .tsv
-    report = report.drop(columns=["filename", "path", "dir"]) # delete unnessesary cols
-    report.to_csv(dir + "/report.tsv", sep='\t', index=False, header=True, mode="a")
+    report.drop(columns=["filename", "path", "dir"], inplace=True) # delete unnessesary cols
+    report.to_csv(dir + "/report.csv", sep='\t', index=False, header=True, encoding='utf-8', mode="a")
 
 
 if __name__ == "__main__":
