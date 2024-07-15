@@ -11,7 +11,6 @@ import pandas as pd
 from Bio import SeqIO
 from Bio import AlignIO
 from collections import Counter
-import inspect
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
@@ -247,21 +246,9 @@ def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_
     
     return taxids
 
-def get_variable_name(variable):
-     frame = inspect.currentframe()
-     caller_frame = frame.f_back.f_back
-     local_vars = caller_frame.f_locals
-     varname = [key for key, value in local_vars.items() if value == variable]
-     if len(varname) == 0:
-          return None
-     elif len(varname) == 1:
-          return varname[0]
-     else:
-        return varname
-
-def is_empty(data):
-    if not data:
-        raise ValueError(f"Variable {data} is empty. Exiting the program.")
+def is_empty(var, var_name):
+    if not var:
+        raise ValueError(f"Variable {var_name} is empty. Exiting the program.")
 
 def check_1_file_exists(file_path):
     if not os.path.isfile(file_path):
@@ -289,14 +276,6 @@ def move_files(dir, files):
         except OSError as e:
             print(f"OS error occurred while moving file {file}: {e}")
         
-class PatternError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-        self.message = message
-    
-    def __str__(self):
-        return f"PatternError: {self.message}"
-
 def main():
     args = parse_arguments()
     dir = args.directory
@@ -316,15 +295,14 @@ def main():
     #database = '/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA'
 
     if parsing_mode == "auto":
-        ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
-        is_empty(ab1_files)
-    
+        ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files    
     elif parsing_mode == "manual":
         ab1_files = list_of_files_by_pattern(dir=dir, extension="ab1", patterns=parsing_patterns)
-        is_empty(ab1_files)
+    
+    is_empty(ab1_files, "ab1_files")
 
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
-    is_empty(data)
+    is_empty(data, "data")
 
     # Add info to report dataframe
     report = pd.DataFrame(data)
@@ -359,18 +337,17 @@ def main():
 
     '''2nd cycle - make alignment, build consensus, blast'''
     if blastn_mode == "auto":
-        fa_files = list_of_files(dir, "fa") # full paths to .fa files
-        is_empty(fa_files)
-    
+        fa_files = list_of_files(dir, "fa") # full paths to .fa files    
     elif blastn_mode == "manual":
         fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
-        is_empty(fa_files)
-
+    
+    is_empty(fa_files, "fa_files")
+    
     data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
-    is_empty(data)
+    is_empty(data, "data")
 
     sample_names = np.unique([file['sample_name'] for file in data if file]).tolist() #  store unique sample names in array
-    is_empty(sample_names)
+    is_empty(sample_names, "sample_names")
     
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
     for sample_name in sample_names:
