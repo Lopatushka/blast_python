@@ -31,6 +31,7 @@ After consensus building the program generate report.csv file with information a
 
 ### Blastn search
 Blastn search is performed against locally installed blast database. You need to specify the path to this database (--database)
+To speep up analysis on server you also need to specify --nthreads argument (defult is 4).
 Resalts are stored in ./blastn.csv table.
 Results are sorted by pident and filtered subsequently by query coverage (--qcovus, default = 80%) and percent of identity (--pident, default = 95%).
 If there is no hits after filtration, the program shows first five hits.
