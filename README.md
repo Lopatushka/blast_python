@@ -1,4 +1,3 @@
-```markdown
 # Automatic Sanger sequencing results analysis
 
 ## Description
@@ -45,20 +44,24 @@ Example of code for linux-command line:
 dir = './tests'
 database = '/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA'
 python -m blast_python.main -d $dir -db $database
+```
 
 ## Nucleotide Blast database
 You can use a ready-made NCBI blast database or build your own database.
 To check all blast databases allowed for downloading use the following command:
 ```bash
 update_blastdb.pl --showal
+```
 
 To download database use this:
 ```bash
 mkdir -p blast_database cd blast_database update_blastdb.pl name_of_database --decompress
+```
 
 If you need to use taxonomy-related information:
 ```bash
 update_blastdb.pl taxdb --decomress
+```
 
 To build your own blast database with taxonomy information you need to follow these steps:
 1. Download sequences of interest in fasta format to a single .fa file.
@@ -79,6 +82,7 @@ esearch -db nuccore -query "16S[All Fields] AND rRNA[All Fields] NOT Uncultured[
                             AND(feces[All Fields] OR stool[All Fields] OR gut[All Fields] OR fecal[All Fields]) \
                             AND ("1000"[SLEN]:"2000"[SLEN])" \
                             | efetch -format fasta > files.fa
+```
 
 For details see E-Utilities manual, esearch -help.
 
@@ -97,6 +101,7 @@ Example of code:
 wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz gunzip
 cat nucl_gb.accession2taxid | head -5
 cut -f 2,3 nucl_gb.accession2taxid | awk 'NR>1' > nucl_gb.accession2taxid_use
+```
 
 Example of mask file with two rows:
 LN998086.1 10641
@@ -110,6 +115,7 @@ To create blast database use the command makeblastdb.
 Example:
 ```bash
 makeblastdb -in files.fa -parse_seqids -taxid_map mask_file -dbtype nucl -out my_database
+```
 
 For details see: makeblastdb -help, makeblastdb manual:
 https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.makeblastdb_application_opt/
@@ -118,6 +124,7 @@ https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.makeblastdb_appl
 Download taxdb.bti, taxdb.btd, and taxonomy4blast.sqlite3 files and put them to the directory of your database:
 ```bash
 update_blastdb.pl taxdb --decomress
+```
 
 For details see BLAST+ manual.
 
@@ -125,6 +132,7 @@ For details see BLAST+ manual.
 Use the following commands for blast database checking:
 ```bash
 blastdbcmd -db my_databse -info blastdbcmd -db my_databse -tax_info
+```
 
 For details see: BLAST+ manual, blastdbcmd -help
 
