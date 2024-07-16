@@ -163,8 +163,11 @@ def main():
     move_files(dir + "/consensus_alns", aln_files)
     move_files(dir + "/blast_alns", txt_files)
 
-    # Save report as .tsv
+    # Modify report as 
     report.drop(columns=["filename", "path", "dir"], inplace=True) # delete unnessesary cols
+    report["is_consensus"] = report["is_consensus"].fillna(False)
+    
+    # Save report as .csv
     report.to_csv(dir + "/report.csv", sep='\t', index=False, header=True, encoding='utf-8', mode="a")
 
 
