@@ -18,8 +18,8 @@ This package makes automated bulk Sanger sequencing data analysis.
 ### Trimming Sanger sequencing reads
 Trimming is performed using BBMap software from both right and left ends by Phred algotithm with following arguments:
 
---trimming_quality specifies trimq argument  (default is 15)
---minlength specifies minlength argument (default is 50)
++ --trimming_quality specifies trimq argument  (default is 15)
++ --minlength specifies minlength argument (default is 50)
 
 For details see BBMap manual.
 
@@ -104,8 +104,8 @@ cut -f 2,3 nucl_gb.accession2taxid | awk 'NR>1' > nucl_gb.accession2taxid_use
 ```
 
 Example of mask file with two rows:
-LN998086.1 10641
-AB117566.1 9913
+* LN998086.1 10641
+* AB117566.1 9913
 
 For details see BLAST+ manual and makeblastdb manual in particularly:
 https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.makeblastdb_application_opt/
