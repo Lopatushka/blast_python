@@ -1,3 +1,4 @@
+```markdown
 # Automatic Sanger sequencing results analysis
 
 ## Description
