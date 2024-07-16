@@ -4,13 +4,13 @@
 This package makes automated bulk Sanger sequencing data analysis.
 
 ## Prerequisites
-python >=3.8.19 version or higher
-pandas 2.0.3
-numpy 1.24.4
-biopython 1.83
-bbduk.sh version 39.08
-CLUSTAL 2.1
-BLAST 2.15.0+
++ python >=3.8.19 version or higher
++ pandas 2.0.3
++ numpy 1.24.4
++ biopython 1.83
++ bbduk.sh version 39.08
++ CLUSTAL 2.1
++ BLAST 2.15.0+
 
 ## Instalation
 
