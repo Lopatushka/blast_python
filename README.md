@@ -27,10 +27,11 @@ For details see BBMap manual.
 Consensus is built using custom defined funtion.
 If the number of 'N' in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 15%), consensus is qualified is bad.
 In this case, blastn search will be performed for F and R reads independently.
+After consensus building the program generate report.csv file with information about each read, its trimming consensus status.
 
 ### Blastn search
 Blastn search is performed against locally installed blast database. You need to specify the path to this database (--database)
-Resalts are stored in ./blastn.tsv table.
+Resalts are stored in ./blastn.csv table.
 Results are sorted by pident and filtered subsequently by query coverage (--qcovus, default = 80%) and percent of identity (--pident, default = 95%).
 If there is no hits after filtration, the program shows first five hits.
 
