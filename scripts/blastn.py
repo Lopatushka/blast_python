@@ -50,8 +50,8 @@ def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_
     taxids = ','.join(map(str, list(df["staxid"])))
 
     # Save results
-    output_file_tmp = dir + "/tmp.tsv"
-    output_file = dir + "/blastn.tsv"
+    output_file_tmp = dir + "/tmp.csv"
+    output_file = dir + "/blastn.csv"
     df.to_csv(output_file_tmp, sep='\t', index=False, header=True, mode="w")
     with open(output_file_tmp, 'r') as file:
         content = file.read()
