@@ -1,4 +1,4 @@
-file=./test/1_consensus.fa db=../db/16S_rRNAs_fecal_long/16S_rRNAs_fecal_long qcovus_treshold=80, pident_treshold=95
+file=test/1_consensus.fa db=../db/16S_rRNAs_fecal_long/16S_rRNAs_fecal_long qcovus_treshold=80, pident_treshold=95
 qseqid	sacc	staxid	evalue	pident	mismatch	gaps	qcovus	length	sscinames_occurence	sscinames
 1_consensus	MN537480	2652279	0.0	97.022	22	4	100	873	2	Olsenella porci
 1_consensus	LR135790	2495413	0.0	96.907	23	4	100	873	12	Olsenella sp.
@@ -9,7 +9,7 @@ qseqid	sacc	staxid	evalue	pident	mismatch	gaps	qcovus	length	sscinames_occurence
 1_consensus	LT797539	1964384	0.0	95.522	39	0	100	871	2	Olsenella congonensis
 1_consensus	PP512855	2995128	0.0	95.069	40	3	100	872	1	Granulimonas sp.
 
-file=./test/2_consensus.fa db=../db/16S_rRNAs_fecal_long/16S_rRNAs_fecal_long qcovus_treshold=80, pident_treshold=95
+file=test/2_consensus.fa db=../db/16S_rRNAs_fecal_long/16S_rRNAs_fecal_long qcovus_treshold=80, pident_treshold=95
 qseqid	sacc	staxid	evalue	pident	mismatch	gaps	qcovus	length	sscinames_occurence	sscinames
 2_consensus	AY804149	301302	0.0	99.87	1	0	100	767	5	Roseburia faecis
 2_consensus	FM954975	583271	0.0	99.739	2	0	100	767	19	Roseburia sp.
