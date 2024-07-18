@@ -1,6 +1,7 @@
 /data
 /scripts/rename.sh
 /scripts/copy.sh
+/test
 taxdb.btd
 taxdb.bti
 taxonomy4blast.sqlite3
