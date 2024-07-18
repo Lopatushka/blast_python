@@ -43,7 +43,7 @@ def run_clustalw(input_fasta):
     command = f'clustalw2 -INFILE={input_fasta}'
     subprocess.run(command, capture_output=True, check=True, shell = True)
 
-def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.7):
+def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.6):
     try:
         # IUPAC nucleotide codes
         iupac_codes = {
