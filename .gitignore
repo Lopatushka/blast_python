@@ -1,5 +1,6 @@
 /data
-test.py
+/scripts/rename.sh
+/scripts/copy.sh
 taxdb.btd
 taxdb.bti
 taxonomy4blast.sqlite3
