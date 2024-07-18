@@ -100,9 +100,10 @@ Finally, exctract two columns you needed from this file, delete the first string
 
 Example of code:
 ```bash
-wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz gunzip
-cat nucl_gb.accession2taxid | head -5
-cut -f 2,3 nucl_gb.accession2taxid | awk 'NR>1' > nucl_gb.accession2taxid_use
+1. wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz
+2. gunzip path/to/nucl_gb.accession2taxid.gz
+3. cat nucl_gb.accession2taxid | head -5
+4. cut -f 2,3 nucl_gb.accession2taxid | awk 'NR>1' > nucl_gb.accession2taxid_use
 ```
 
 Example of mask file with two rows:
