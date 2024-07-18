@@ -125,7 +125,7 @@ https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.makeblastdb_appl
 ### 4. taxdb.bti, taxdb.btd, and taxonomy4blast.sqlite3 files
 Download taxdb.bti, taxdb.btd, and taxonomy4blast.sqlite3 files and put them to the directory of your database:
 ```bash
-update_blastdb.pl taxdb --decomress
+update_blastdb.pl taxdb --decompress
 ```
 
 For details see BLAST+ manual.
