@@ -54,8 +54,8 @@ def main():
             remove_file_by_pattern(file['dir'], pattern="*.fq") # remove .fq files
 
             # Make reverse complement if primer is reverse
-            if "R" in file['primer'].split("-")[1]:
-            #if "R" in file['primer']:
+            #if "R" in file['primer'].split("-")[1]:
+            if "R" in file['primer']:
                 fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
                 reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
                 remove_file(fa_trimmed) # remove original fasta file
