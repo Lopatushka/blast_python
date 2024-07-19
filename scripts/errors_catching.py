@@ -21,3 +21,23 @@ class ArgumentError(Exception):
     def __init__(self, message):
         self.message = message
         super().__init__(self.message)
+
+def check_blast_database(database):
+    dir = os.path.dirname(database)
+    if not os.path.isdir(dir):
+        raise IOError(f"Path {dir} to blastn database is not found")
+    
+    list_of_files = os.listdir(dir)
+
+    # Check taxonomy_files are located in blast database dir
+    taxonomy_files = ['taxdb.btd', 'taxdb.bti', 'taxonomy4blast.sqlite3']
+    for taxonomy_file in taxonomy_files:
+        if taxonomy_file not in list_of_files:
+            raise IOError(f"{taxonomy_file} is not found in blastn database {database}")
+    database_name = database.split("/")[-1]
+    
+    for taxonomy_file in taxonomy_files:
+        list_of_files.remove(taxonomy_file)
+    
+    if sum([file[:-4] == database_name for file in list_of_files]) == 0:
+        raise ValueError(f"Wrong value of blastn database name: {database_name}")
