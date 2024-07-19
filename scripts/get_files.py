@@ -47,24 +47,46 @@ def list_of_files_by_pattern(dir, extension, patterns):
     return files_to_process
 
 def filename_parsing(file):
-    try:
-        filename = file.split("/")[-1][:-4] # file name without extension
-        sample_type = filename.split("_")[1] # sample type: C - culture, P - plasmid etc.
-        sample_name = filename.split("_")[2] # sample name
-        primer = filename.split("_")[3] # primer
-        dir = "/".join(file.split("/")[:-1]) # path to directory
-        return {'filename': filename,
+    sample_types = ["C", "CS", "F", "A"]
+    #primer_names = []
+    
+    # Get filename without extension
+    filename = file.split("/")[-1][:-4]
+
+    # Split filename by _ and check its length
+    filename_splitted = filename.split("_")
+    if len(filename_splitted) < 7:
+        raise ValueError(f"Error parsing filename {file}")
+   
+   # Get sample type and check it
+    sample_type = filename_splitted[1]
+    if sample_type not in sample_types:
+        raise ValueError(f"Error parsing filename {file}: wrong sample_type: {sample_type}")
+    
+    # Get sample name
+    sample_name = filename_splitted[2]
+
+    # Get primer name
+    primer = filename_splitted[3]
+    primer_splitted = primer.split("-")
+
+    # Check primer name
+    if len(primer_splitted) != 2:
+        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}")
+    #if primer_splitted[0] not in primer_names:
+        #raise ValueError(f"Error parsing filename {file}: wrong primer name {primer}")
+    if ("F" not in primer_splitted[1]) & ("f" not in primer_splitted[1]) & ("R" not in primer_splitted[1]) & ("r" not in primer_splitted[1]):
+        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}")
+
+    # Get path to dir
+    dir = "/".join(file.split("/")[:-1])
+    # Check dir and parsing prosedure in general
+    if not os.path.isdir(dir):
+        raise ValueError(f"Error parsing filename {file}: directory {dir} doesn't exist")
+    
+    return {'filename': filename,
                 'sample_type': sample_type,
                 'sample_name': sample_name,
                 'primer': primer,
                 'path': file,
                 'dir': dir}
-    except IndexError as e:
-        warnings.warn(f"Error parsing filename {file}: {e}")
-        return {}
-    except AttributeError as e:
-        warnings.warn(f"Invalid input type for filename {file}: {e}")
-        return {}
-    except Exception as e:
-        warnings.warn(f"An unexpected error occurred while parsing filename '{file}': {e}")
-        return {}
