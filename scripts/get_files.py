@@ -10,7 +10,7 @@ def parse_arguments():
     parser.add_argument('--blastn_mode', '-bm', type=str, default="auto", choices=["auto", "manual"], help='Balstn search mode. Options: auto (default), manual')
     parser.add_argument('--consensus_patterns', '-cp', nargs='*', type=str, default=list(), help='Unique patterns in filenames of consensuses for manual blastn search')
     parser.add_argument('--consensus_quality', '-cq', type=int, default=15, help="Maximum percetage of 'N' in consensus. Default value = 15")
-    parser.add_argument('--nthreads', '-nt', type=int, default=4, help='Number of threads for blastn search')
+    parser.add_argument('--nthreads', '-nt', type=int, default=4, help='Number of threads for blastn search. Default value = 4')
     parser.add_argument('--trimming_quality', '-tq', type=int, default=15, help='Trimming quality. Default value = 15')
     parser.add_argument('--minlength', '-ml', type=int, default=50, help='Minimum length of consensus. Default value = 50')
     parser.add_argument('--database', '-db', type=str, default="/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA", help='Blastn database')
