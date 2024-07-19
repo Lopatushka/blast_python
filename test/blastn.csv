@@ -1,0 +1,97 @@
+file=test/1_consensus.fa db=../db/16S_rRNAs_fecal_long/16S_rRNAs_fecal_long qcovus_treshold=80, pident_treshold=95
+qseqid	sacc	staxid	evalue	pident	mismatch	gaps	qcovus	length	sscinames_occurence	sscinames
+1_consensus	MN537480	2652279	0.0	97.022	22	4	100	873	2	Olsenella porci
+1_consensus	LR135790	2495413	0.0	96.907	23	4	100	873	12	Olsenella sp.
+1_consensus	OM533390	2930083	0.0	96.789	26	2	100	872	2	Olsenella intestinalis
+1_consensus	LN827536	1622075	0.0	96.441	31	0	100	871	2	Olsenella massiliensis
+1_consensus	NR_179506	1805478	0.0	96.33	30	2	100	872	2	Olsenella timonensis
+1_consensus	MN537477	604330	0.0	96.101	32	2	100	872	2	Parafannyhessea umbonata
+1_consensus	LT797539	1964384	0.0	95.522	39	0	100	871	2	Olsenella congonensis
+1_consensus	PP512855	2995128	0.0	95.069	40	3	100	872	1	Granulimonas sp.
+
+file=test/2_consensus.fa db=../db/16S_rRNAs_fecal_long/16S_rRNAs_fecal_long qcovus_treshold=80, pident_treshold=95
+qseqid	sacc	staxid	evalue	pident	mismatch	gaps	qcovus	length	sscinames_occurence	sscinames
+2_consensus	AY804149	301302	0.0	99.87	1	0	100	767	5	Roseburia faecis
+2_consensus	FM954975	583271	0.0	99.739	2	0	100	767	19	Roseburia sp.
+2_consensus	LC515583	166486	0.0	99.089	6	1	100	768	3	Roseburia intestinalis
+2_consensus	MT905196	2763062	0.0	99.079	6	1	99	760	1	Roseburia rectibacter
+2_consensus	MT875037	301301	0.0	99.078	7	0	99	759	6	Roseburia hominis
+2_consensus	LC515616	360807	0.0	97.375	15	5	99	762	4	Roseburia inulinivorans
+2_consensus	MZ310682	39491	0.0	97.23	20	1	99	758	9	Agathobacter rectalis
+2_consensus	MT905195	2763064	0.0	97.128	22	0	99	766	1	Roseburia zhanii
+2_consensus	MN537536	2605790	0.0	97.124	22	0	99	765	2	Roseburia porci
+2_consensus	OK510356	2981794	0.0	96.615	24	2	99	768	1	Roseburia amylophila
+2_consensus	MT905197	2763060	0.0	96.615	24	2	99	768	1	Roseburia difficilis
+2_consensus	MT905194	2763063	0.0	96.354	23	5	99	768	1	Roseburia yibonii
+2_consensus	LC515615	2316022	0.0	95.698	32	1	100	767	5	Mediterraneibacter sp.
+2_consensus	MT905192	2764578	0.0	95.698	32	1	100	767	4	Faecalicatena sp.
+2_consensus	MK615130	2850323	0.0	95.692	30	3	99	766	1	Diplocloster agilis
+2_consensus	MT905193	2763061	0.0	95.652	32	1	99	759	1	Roseburia lenta
+2_consensus	NR_116747	1298596	0.0	95.641	32	1	99	757	2	[Ruminococcus] faecis
+2_consensus	KT221541	39490	0.0	95.573	31	3	100	768	2	Eubacterium ramulus
+2_consensus	AY239462	245292	0.0	95.515	28	6	99	758	30	Clostridium sp.
+2_consensus	NR_180815	2606633	0.0	95.509	33	1	99	757	2	Oliverpabstia intestinalis
+2_consensus	NR_180026	2696678	0.0	95.509	33	1	99	757	2	Blautia brookingsii
+2_consensus	MK217409	1955243	0.0	95.509	33	1	99	757	32	Blautia sp.
+2_consensus	MT905181	2763031	0.0	95.509	33	1	99	757	1	Blautia tarda
+2_consensus	LC770320	33039	0.0	95.437	30	5	99	767	3	[Ruminococcus] torques
+2_consensus	MZ310678	410072	0.0	95.437	30	5	99	767	3	Coprococcus comes
+2_consensus	MN239492	2599606	0.0	95.437	30	5	99	767	5	Coprococcus sp.
+2_consensus	MN537529	2606634	0.0	95.431	33	2	99	766	2	Velocimicrobium porci
+2_consensus	AJ250365	657324	0.0	95.419	34	1	99	764	2	Butyrivibrio fibrisolvens
+2_consensus	LT722679	1936999	0.0	95.376	30	5	98	757	1	Lactonifactor sp.
+2_consensus	LN898273	1745713	0.0	95.189	32	5	100	769	2	Bariatricus massiliensis
+2_consensus	MK424331	2509240	0.0	95.112	36	1	99	757	2	Blautia faecicola
+2_consensus	MZ310606	1890292	0.0	95.046	36	2	99	767	1	Falcatimonas sp.
+
+file=./test/1_consensus.fa db=../db_16S_ribosomal_RNA/16S_ribosomal_RNA qcovus_treshold=80, pident_treshold=95
+qseqid	sacc	staxid	evalue	pident	mismatch	gaps	qcovus	length	sscinames_occurence	sscinames
+1_consensus	NR_173692	1871033	0.0	100.0	0	0	100	871	1	Olsenella urininfantis
+1_consensus	NR_173693	1852385	0.0	98.163	16	0	100	871	1	Olsenella phocaeensis
+1_consensus	NR_116939	997349	0.0	97.477	20	2	100	872	3	Olsenella profusa
+1_consensus	NR_180810	2652279	0.0	97.022	22	4	100	873	1	Olsenella porci
+1_consensus	NR_074414	633147	0.0	96.907	23	4	100	873	4	Olsenella uli
+1_consensus	NR_181929	2930083	0.0	96.789	26	2	100	872	1	Olsenella intestinalis
+1_consensus	NR_173694	1622075	0.0	96.441	31	0	100	871	1	Olsenella massiliensis
+1_consensus	NR_179506	1805478	0.0	96.33	30	2	100	872	1	Olsenella timonensis
+1_consensus	NR_180618	2779357	0.0	96.216	31	2	100	872	1	Thermophilibacter gallinarum
+1_consensus	NR_116936	604330	0.0	96.101	32	2	100	872	1	Parafannyhessea umbonata
+1_consensus	NR_173690	1852386	0.0	95.986	33	2	100	872	1	Thermophilibacter provencensis
+1_consensus	NR_180580	2584469	0.0	95.872	34	2	100	872	1	Olsenella lakotia
+1_consensus	NR_181210	2779519	0.0	95.647	34	4	100	873	1	Thermophilibacter immobilis
+1_consensus	NR_173691	1871031	0.0	95.637	38	0	100	871	1	Thermophilibacter mediterraneus
+1_consensus	NR_146815	1776381	0.0	95.556	36	0	93	810	1	Olegusella massiliensis
+1_consensus	NR_179615	1964384	0.0	95.522	39	0	100	871	1	Olsenella congonensis
+1_consensus	NR_134781	1299998	0.0	95.413	38	2	100	872	1	Tractidigestivibacter scatoligenes
+
+file=./test/2_consensus.fa db=../db_16S_ribosomal_RNA/16S_ribosomal_RNA qcovus_treshold=80, pident_treshold=95
+qseqid	sacc	staxid	evalue	pident	mismatch	gaps	qcovus	length	sscinames_occurence	sscinames
+2_consensus	NR_042832	301302	0.0	99.87	1	0	100	767	1	Roseburia faecis
+2_consensus	NR_117758	166486	0.0	99.089	6	1	100	768	2	Roseburia intestinalis
+2_consensus	NR_074809	585394	0.0	98.825	9	0	99	766	2	Roseburia hominis
+2_consensus	NR_042007	622312	0.0	97.372	15	5	99	761	1	Roseburia inulinivorans
+2_consensus	NR_180825	2605790	0.0	97.124	22	0	99	765	1	Roseburia porci
+2_consensus	NR_074634	515619	0.0	96.834	23	1	99	758	1	Agathobacter rectalis
+2_consensus	NR_148619	1712665	0.0	96.732	23	2	99	765	1	Agathobacter ruminis
+2_consensus	NR_179548	1870993	0.0	95.822	29	3	99	766	1	Coprococcus phoceensis
+2_consensus	NR_104737	1732	0.0	95.698	28	5	99	767	1	Eubacterium oxidoreducens
+2_consensus	NR_181407	2850323	0.0	95.692	30	3	99	766	1	Diplocloster agilis
+2_consensus	NR_181403	2763061	0.0	95.652	32	1	99	759	1	Roseburia lenta
+2_consensus	NR_116747	1298596	0.0	95.641	32	1	99	757	1	[Ruminococcus] faecis
+2_consensus	NR_181885	2885351	0.0	95.567	33	1	100	767	1	Hominisplanchenecus faecis
+2_consensus	NR_181406	2850322	0.0	95.561	31	3	99	766	1	Diplocloster modestus
+2_consensus	NR_180026	2696678	0.0	95.509	33	1	99	757	1	Blautia brookingsii
+2_consensus	NR_180815	2606633	0.0	95.509	33	1	99	757	1	Oliverpabstia intestinalis
+2_consensus	NR_044048	470146	0.0	95.437	30	5	99	767	1	Coprococcus comes
+2_consensus	NR_104783	290052	0.0	95.431	33	2	99	766	1	Acetivibrio ethanolgignens
+2_consensus	NR_180823	2606634	0.0	95.431	33	2	99	766	1	Velocimicrobium porci
+2_consensus	NR_029248	500632	0.0	95.431	27	8	99	766	1	[Clostridium] nexile
+2_consensus	NR_181393	2763664	0.0	95.389	32	3	99	759	1	Jutongia hominis
+2_consensus	NR_025206	180286	0.0	95.251	35	1	99	758	1	Hespellia porcina
+2_consensus	NR_144735	1745713	0.0	95.189	32	5	100	769	1	Bariatricus massiliensis
+2_consensus	NR_114392	1544	0.0	95.17	34	3	99	766	8	Faecalicatena orotica
+2_consensus	NR_152688	433279	0.0	95.125	34	3	99	759	1	Falcatimonas natans
+2_consensus	NR_170495	2509240	0.0	95.112	36	1	99	757	1	Blautia faecicola
+2_consensus	NR_112553	342942	0.0	95.033	38	0	99	765	1	Mediterraneibacter glycyrrhizinilyticus
+2_consensus	NR_026315	46206	0.0	95.026	37	1	99	764	1	Pseudobutyrivibrio ruminis
+
