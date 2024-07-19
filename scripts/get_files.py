@@ -49,9 +49,9 @@ def list_of_files_by_pattern(dir, extension, patterns):
 def filename_parsing(file):
     try:
         filename = file.split("/")[-1][:-4] # file name without extension
-        sample_type = file.split("_")[1] # sample type: C - culture, P - plasmid etc.
-        sample_name = file.split("_")[2] # sample name
-        primer = file.split("_")[3] # primer
+        sample_type = filename.split("_")[1] # sample type: C - culture, P - plasmid etc.
+        sample_name = filename.split("_")[2] # sample name
+        primer = filename.split("_")[3] # primer
         dir = "/".join(file.split("/")[:-1]) # path to directory
         return {'filename': filename,
                 'sample_type': sample_type,
