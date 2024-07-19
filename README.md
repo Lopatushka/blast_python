@@ -23,13 +23,15 @@ For details see BBMap manual.
 
 ### Names of .ab1 files
 There is the template for .ab1 files naming:
+
 **Plate-YYYY-ММ-DD_type_name_primer-orientation_extra_information.ab1**
-YYYY-ММ-DD - date of Sanger sequencing
-type - type of sample: C - culture, P - plasmid etc.
-name - name of sample: 122, 156-1000bp,  etc.
-primer - name of primer: R.gnavus, 16S155, etc.
-orientation - orientation of primer: F, R
-extra_information - doesn't include in the processing of .ab1 filenames
+
+1. YYYY-ММ-DD - date of Sanger sequencing
+2. type - type of sample: C - culture, P - plasmid etc.
+3. name - name of sample: 122, 156-1000bp,  etc.
+4. primer - name of primer: R.gnavus, 16S155, etc.
+5. orientation - orientation of primer: F, R
+6. extra_information - doesn't include in the processing of .ab1 filenames
 
 ### Consensus finding
 Consensus is built using custom defined funtion.
