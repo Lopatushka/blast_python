@@ -21,6 +21,16 @@ Trimming is performed using BBMap software from both right and left ends by Phre
 
 For details see BBMap manual.
 
+### Names of .ab1 files
+There is the template for .ab1 files naming:
+**Plate-YYYY-ММ-DD_type_name_primer-orientation_extra_information.ab1**
+YYYY-ММ-DD - date of Sanger sequencing
+type - type of sample: C - culture, P - plasmid etc.
+name - name of sample: 122, 156-1000bp,  etc.
+primer - name of primer: R.gnavus, 16S155, etc.
+orientation - orientation of primer: F, R
+extra_information - doesn't include in the processing of .ab1 filenames
+
 ### Consensus finding
 Consensus is built using custom defined funtion.
 If the number of 'N' in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 15%), consensus is qualified is bad.
@@ -56,7 +66,7 @@ update_blastdb.pl --showal
 To download database use this:
 ```bash
 mkdir -p name_of_directory
-cd ame_of_directory
+cd name_of_directory
 update_blastdb.pl name_of_database --decompress
 ```
 
@@ -77,9 +87,10 @@ For details see BLAST+ manual.
 ### 1. Fasta sequence downloading
 You can use both web version of NCBI Nucleotide database or use E-Utilities.
 
-Example:
+Example of code:
 ```bash
-mkdir -p my_database cd ./my_database
+mkdir -p my_database
+cd ./my_database
 esearch -db nuccore -query "16S[All Fields] AND rRNA[All Fields] NOT Uncultured[All Fields] \
                             AND(feces[All Fields] OR stool[All Fields] OR gut[All Fields] OR fecal[All Fields]) \
                             AND ("1000"[SLEN]:"2000"[SLEN])" \
@@ -103,7 +114,7 @@ Example of code:
 wget https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/accession2taxid/nucl_gb.accession2taxid.gz
 gunzip path/to/nucl_gb.accession2taxid.gz
 cat nucl_gb.accession2taxid | head -5
-cut -f 2,3 nucl_gb.accession2taxid | awk 'NR>1' > nucl_gb.accession2taxid_use
+cut -f 2,3 nucl_gb.accession2taxid | awk 'NR>1' > mask_file
 ```
 
 Example of mask file with two rows:
