@@ -12,8 +12,6 @@ This package makes automated bulk Sanger sequencing data analysis.
 + CLUSTAL 2.1
 + BLAST 2.15.0+
 
-## Instalation
-
 ## Algorithm
 ### Trimming Sanger sequencing reads
 Trimming is performed using BBMap software from both right and left ends by Phred algotithm with following arguments:
@@ -45,7 +43,7 @@ Example of code for linux-command line:
 ```bash
 dir = './tests'
 database = '/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA'
-python -m blast_python.main -d $dir -db $database
+python main.py -d $dir -db $database
 ```
 
 ## Nucleotide Blast database
@@ -57,12 +55,14 @@ update_blastdb.pl --showal
 
 To download database use this:
 ```bash
-mkdir -p blast_database cd blast_database update_blastdb.pl name_of_database --decompress
+mkdir -p name_of_directory
+cd ame_of_directory
+update_blastdb.pl name_of_database --decompress
 ```
 
 If you need to use taxonomy-related information:
 ```bash
-update_blastdb.pl taxdb --decomress
+update_blastdb.pl taxdb --decompress
 ```
 
 To build your own blast database with taxonomy information you need to follow these steps:
