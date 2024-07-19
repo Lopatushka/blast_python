@@ -2,6 +2,7 @@
 /scripts/rename.sh
 /scripts/copy.sh
 /test
+test.py
 taxdb.btd
 taxdb.bti
 taxonomy4blast.sqlite3

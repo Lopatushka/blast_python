@@ -33,7 +33,7 @@ def main():
 
     # Initialize report dataframe
     report = pd.DataFrame(data)
-         
+
     '''1st cycle - trimming, make revese complement'''
     for file in data:
         # Generation of fastq files
