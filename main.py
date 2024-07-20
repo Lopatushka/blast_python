@@ -1,6 +1,7 @@
 from scripts import *
 
 def main():
+    # Read command-line arguments
     args = parse_arguments()
     dir = args.directory
     parsing_mode = args.parsing_mode
@@ -15,12 +16,10 @@ def main():
     qcovus = args.qcovus
     pident = args.pident
 
-    # Check that dir argument is provided
-    try:
-        is_empty_variable(dir, "dir")
-    except ValueError as e:
-        raise ArgumentError("The path to directory with .ab1 fils isn't provided. For details see --help.")
+    # Check arguments provided
+    check_blast_database(database)
 
+    # Parsing starts
     if parsing_mode == "auto":
         ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
     elif parsing_mode == "manual":
@@ -29,7 +28,6 @@ def main():
     is_empty_variable(ab1_files, "ab1_files")
 
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
-    is_empty_variable(data, "data")
 
     # Initialize report dataframe
     report = pd.DataFrame(data)
@@ -54,7 +52,7 @@ def main():
             remove_file_by_pattern(file['dir'], pattern="*.fq") # remove .fq files
 
             # Make reverse complement if primer is reverse
-            if "R" in file['primer'].split("-")[1]:
+            if ("R" in file['primer'].split("-")[1]) | ("r" in file['primer'].split("-")[1]):
             #if "R" in file['primer']:
                 fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
                 reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
@@ -72,10 +70,8 @@ def main():
     is_empty_variable(fa_files, "fa_files")
 
     data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
-    is_empty_variable(data, "data")
-
+    
     sample_names = np.unique([file['sample_name'] for file in data if file]).tolist() #  store unique sample names in array
-    is_empty_variable(sample_names, "sample_names")
     
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
     for sample_name in sample_names:

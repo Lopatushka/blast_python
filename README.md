@@ -33,15 +33,17 @@ There is the template for .ab1 files naming:
 5. orientation - orientation of primer: F, R
 6. extra_information - doesn't include in the processing of .ab1 filenames
 
+For details see test directory.
+
 ### Consensus finding
-Consensus is built using custom defined funtion.
+Consensus is built using custom defined function.
 If the number of 'N' in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 15%), consensus is qualified is bad.
 In this case, blastn search will be performed for F and R reads independently.
 After consensus building the program generate report.csv file with information about each read, its trimming consensus status.
 
 ### Blastn search
 Blastn search is performed against locally installed blast database. You need to specify the path to this database (--database)
-To speep up analysis on server you also need to specify --nthreads argument (defult is 4).
+To speed up analysis on server you also need to specify --nthreads argument (defult is 4).
 Resalts are stored in ./blastn.csv table.
 Results are sorted by pident and filtered subsequently by query coverage (--qcovus, default = 80%) and percent of identity (--pident, default = 95%).
 If there is no hits after filtration, the program shows first five hits.
@@ -53,8 +55,8 @@ To use the package launch the program from the commande line.
 Example of code for linux-command line:
 
 ```bash
-dir = './tests'
-database = '/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA'
+dir = 'path/to/ab1_files'
+database = '/home/user_name/directory_name/database_name'
 python main.py -d $dir -db $database
 ```
 
@@ -62,7 +64,7 @@ python main.py -d $dir -db $database
 You can use a ready-made NCBI blast database or build your own database.
 To check all blast databases allowed for downloading use the following command:
 ```bash
-update_blastdb.pl --showal
+update_blastdb.pl --showall
 ```
 
 To download database use this:
@@ -87,13 +89,14 @@ To build your own blast database with taxonomy information you need to follow th
 For details see BLAST+ manual.
 
 ### 1. Fasta sequence downloading
-You can use both web version of NCBI Nucleotide database or use E-Utilities.
+You can use both web version of NCBI Nucleotide database to download fasta sequences or E-Utilities (esearch).
 
 Example of code:
 ```bash
 mkdir -p my_database
 cd ./my_database
-esearch -db nuccore -query "16S[All Fields] AND rRNA[All Fields] NOT Uncultured[All Fields] \
+esearch -db nuccore -query "16S[All Fields] AND rRNA[All Fields]
+                            NOT Uncultured[All Fields] \
                             AND(feces[All Fields] OR stool[All Fields] OR gut[All Fields] OR fecal[All Fields]) \
                             AND ("1000"[SLEN]:"2000"[SLEN])" \
                             | efetch -format fasta > files.fa
@@ -145,7 +148,7 @@ update_blastdb.pl taxdb --decompress
 For details see BLAST+ manual.
 
 ### 5. Check blast database
-Use the following commands for blast database checking:
+Use the following command for blast database checking:
 ```bash
 blastdbcmd -db my_databse -info blastdbcmd -db my_databse -tax_info
 ```
