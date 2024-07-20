@@ -1,6 +1,7 @@
 from scripts import *
 
 def main():
+    # Read command-line arguments
     args = parse_arguments()
     dir = args.directory
     parsing_mode = args.parsing_mode
