@@ -1,10 +1,12 @@
 .gitignore
+
 data/
 test/
-scripts/rename.sh
-scripts/copy.sh
+
+./scripts/rename.sh
+./scripts/copy.sh
+test.py
+
 taxdb.btd
 taxdb.bti
 taxonomy4blast.sqlite3
-
-test.py
