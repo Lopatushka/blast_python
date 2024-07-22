@@ -10,7 +10,6 @@ PATTERN=$2
 RENAME=$3
 
 FIND_RESULTS=$(find ${DIR} -maxdepth 1 -name "*${PATTERN}*")
-#echo "$FIND_RESULTS"
 
 while read FILE
 do
