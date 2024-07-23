@@ -1,12 +1,15 @@
+# Folders
 data/
 test/
 server/
 scripts/__pycache__
 
+# Scripts
 ./scripts/rename.sh
 ./scripts/copy.sh
-test.py
+./test.py
 
+# Taxonomy files
 taxdb.btd
 taxdb.bti
 taxonomy4blast.sqlite3
