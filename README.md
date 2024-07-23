@@ -122,7 +122,7 @@ To exit server run:
 exit
 ```
 
-For more details reed **slurm** documentation.
+For more details read **slurm** documentation.
 
 ## Nucleotide Blast database
 You can use a ready-made NCBI blast database or build your own database.
