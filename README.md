@@ -59,6 +59,70 @@ dir = 'path/to/ab1_files'
 database = '/home/user_name/directory_name/database_name'
 python main.py -d $dir -db $database
 ```
+## Work on server
+To access server run:
+```bash
+ssh user_name@10.100.20.211
+conda activate name_of_enviroment
+cd path/to/working_dir
+```
+Example:
+
+```bash
+ssh elopatuhina@10.100.20.211
+conda activate bioinfo
+cd blast_python
+```
+
+To check the server workload use these commands:
+```bash
+sinfo -e -o "%14N   %6c %10O    %10m    %10e"
+squeue -o"%.7i %.9P %.8j %.8u %.2t %.10M %.6D %.N %C"
+```
+You need to use the node with:
+* maximum CPUS number
+* minimum CPU_LOAD percentage
+* maximum MEMORY resorces available 
+
+Modify **slurm_blast.sh** script (it is located in the *server* folder)  in **vi** text editor based on your requirements:
+*job-name
+*ntasks-per-node - it should be the same as -nt argument in python main.py command
+*nodelist
+*path to stdout file
+*path to stderr file
+
+Run **slurm_blast.sh** script:
+```bash
+sbatch path/to/slurm_blast.sh path/to/directory path/to/blast_database
+```
+
+Example:
+```bash
+sbatch ./server/slurm_blast.sh /home/elopatuhina/sanger_seq/140424 /home/elopatuhina/db/db_nt_prok/nt_prok
+```
+
+Check job status. Example:
+```bash
+squeue -u elopatuhina
+```
+
+*Optional*. To monitor job status you can also use an axualiry script **squeue_check.sh** (in *server* folder)
+Before usage you can modify number of *iterations* and nnumber of seconds in delay * sleep 5s* in **vi** text editor.
+Run this:
+```bash
+bash ./server/squeue_check.sh
+```
+
+After job completing check:
+* ouput of your job in your folder with .ab1 files
+* files with stdout and stderr information
+
+To exit server run:
+```bash
+exit
+```
+
+For more details reed **slurm** documentation.
 
 ## Nucleotide Blast database
 You can use a ready-made NCBI blast database or build your own database.
