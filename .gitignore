@@ -1,13 +1,13 @@
 # Folders
 data/
 test/
-server/
+scripts/server/
 scripts/__pycache__
 
 # Scripts
 ./scripts/rename.sh
 ./scripts/copy.sh
-./test.py
+./scripts/test.py
 
 # Taxonomy files
 taxdb.btd
