@@ -1,7 +1,7 @@
-.gitignore
-
 data/
 test/
+server/
+scripts/__pycache__
 
 ./scripts/rename.sh
 ./scripts/copy.sh
