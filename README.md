@@ -85,11 +85,11 @@ You need to use the node with:
 * maximum MEMORY resorces available 
 
 Modify **slurm_blast.sh** script (it is located in the *server* folder)  in **vi** text editor based on your requirements:
-*job-name
-*ntasks-per-node - it should be the same as -nt argument in python main.py command
-*nodelist
-*path to stdout file
-*path to stderr file
+* job-name
+* ntasks-per-node - it should be the same as -nt argument in python main.py command
+* nodelist
+* path to stdout file
+* path to stderr file
 
 Run **slurm_blast.sh** script:
 ```bash
