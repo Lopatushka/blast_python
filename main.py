@@ -27,8 +27,6 @@ def main():
     
     is_empty_variable(ab1_files, "ab1_files")
 
-    # Check .ab1 filenames ?
-
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
 
     # Initialize report dataframe
