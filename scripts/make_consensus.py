@@ -40,8 +40,11 @@ def merge_fasta_files(input_fasta_files, output_fasta):
             SeqIO.write(records, output_handle, "fasta")
 
 def run_clustalw(input_fasta):
-    command = f'clustalw2 -INFILE={input_fasta}'
-    subprocess.run(command, capture_output=True, check=True, shell = True)
+    try:
+        command = f'clustalw2 -INFILE={input_fasta}'
+        subprocess.run(command, capture_output=True, check=True, shell = True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error occured: {e}")
 
 def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.6):
     try:
