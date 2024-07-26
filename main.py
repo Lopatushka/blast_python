@@ -16,8 +16,14 @@ def main():
     qcovus = args.qcovus
     pident = args.pident
 
-    # Check arguments provided
-    check_blast_database(database)
+    # Check arguments provided - raising errors
+    check_dir_exists(dir_path = dir)
+    check_blast_database(database = database)
+    check_percent_value(value = trimming_quality)
+    check_percent_value(value = qcovus)
+    check_percent_value(value = pident)
+    check_int_value(value = minlength, upper_bound = 500) # check if value < 0 or > 500
+    check_int_value(value = nthreads, upper_bound = 300) # check if value < 0 or > 300
 
     # Parsing starts
     if parsing_mode == "auto":
