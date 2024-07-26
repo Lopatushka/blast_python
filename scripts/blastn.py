@@ -6,15 +6,21 @@ import pandas as pd
 from .errors_catching import check_files_exist
 
 def run_blastn(input_file, database, num_threads):
-    command = f'blastn -query {input_file} -db {database} -num_threads {num_threads}\
-        -outfmt "6 qseqid sacc staxid evalue pident mismatch gaps qcovus length sscinames"'
-    p1 = subprocess.run(command, stdout=subprocess.PIPE,
-                   stderr=subprocess.PIPE, check=True, shell = True, text=True)
-    return p1.stdout
+    try:
+        command = f'blastn -query {input_file} -db {database} -num_threads {num_threads}\
+            -outfmt "6 qseqid sacc staxid evalue pident mismatch gaps qcovus length sscinames"'
+        p1 = subprocess.run(command, stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE, check=True, shell = True, text=True)
+        return p1.stdout
+    except subprocess.CalledProcessError as e:
+        print(f"Error occured during blastn search: {e}")
 
 def run_blastn_alignments(input_file, output_file, database, hits, num_threads):
-    command = f'blastn -query {input_file} -db {database} -num_threads {num_threads} -taxids {hits} -outfmt 0 -out {output_file}'
-    subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell = True, text=True)
+    try:
+        command = f'blastn -query {input_file} -db {database} -num_threads {num_threads} -taxids {hits} -outfmt 0 -out {output_file}'
+        subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell = True, text=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error occured during blastn alignments run: {e}")
 
 def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_name=None, database=None, dir="./"):
     # check axualiry files presence
