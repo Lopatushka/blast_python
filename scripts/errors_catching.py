@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import warnings
-from get_files import filename_parsing
+from .get_files import filename_parsing
 
 def check_1_file_exists(file_path):
     if not os.path.isfile(file_path):
