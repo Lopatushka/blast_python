@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+import warnings
+from get_files import filename_parsing
 
 def check_1_file_exists(file_path):
     if not os.path.isfile(file_path):
@@ -41,3 +43,20 @@ def check_blast_database(database):
     
     if sum([file[:-4] == database_name for file in list_of_files]) == 0:
         raise ValueError(f"Wrong value of blastn database name: {database_name}")
+    
+    def check_ab1_filenames(directory):
+        try:
+            filenames = list_of_files(dir=directory, extension="ab1")
+            for file in filenames:
+                filename_parsing(file)
+        except FileNotFoundError as e:
+                warnings.warn(f"Directory '{dir}' is not found: {e}")
+                return []
+        except PermissionError as e:
+                warnings.warn(f"Permission denied for directory '{dir}': {e}")
+                return []
+        except ValueError as e:
+                warnings.warn(f"Error in file processing: {e}")         
+        except Exception as e:
+                warnings.warn(f"An unexpected error occurred: {e}")
+                return []
