@@ -44,7 +44,7 @@ def run_clustalw(input_fasta):
         command = f'clustalw2 -INFILE={input_fasta}'
         subprocess.run(command, capture_output=True, check=True, shell = True)
     except subprocess.CalledProcessError as e:
-        print(f"Error occured: {e}")
+        print(f"Error occured during clustalw run: {e}")
 
 def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.6):
     try:
