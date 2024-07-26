@@ -59,21 +59,21 @@ def filename_parsing(file):
     # Check filename splitting
     # Length array after splitting
     if len(filename_splitted) < 4:
-        raise ValueError(f"Error parsing filename {file}.\
-                         Filename has to be started with Plate-YY-MM-DD and contain the following information:\
-                         sample_type, sample_name, primer_name and primer orientation.
-                         For detailes see READ.me")
+        raise ValueError(f"Error parsing filename {file}. "
+                            f"Filename has to be started with Plate-YY-MM-DD and contain the following information: "
+                            f"sample_type, sample_name, primer_name and primer orientation. "
+                            f"For detailes see READ.me")
 
     # Plate-YY-MM-DD
     if (len(filename_splitted[0].split("-")) != 4) | (filename_splitted[0].split("-")[0] != "Plate"):
-        raise ValueError(f"Error parsing filename {file}: filename has to be started with 'Plate-YY-MM-DD'.\
-                         For detailes see READ.me")
+        raise ValueError(f"Error parsing filename {file}: filename has to be started with 'Plate-YY-MM-DD'."
+                         f"For detailes see READ.me")
     
     # Get sample type and check it
     sample_type = filename_splitted[1]
     if sample_type not in sample_types:
-        raise ValueError(f"Error parsing filename {file}: wrong sample_type: {sample_type}.\
-                         Possible options for sample_type: {sample_types}. For detailes see READ.me")
+        raise ValueError(f"Error parsing filename {file}: wrong sample_type: {sample_type}. "
+                         f"Possible options for sample_type: {sample_types}. For detailes see READ.me")
   
     # Get sample name
     sample_name = filename_splitted[2]
@@ -84,12 +84,12 @@ def filename_parsing(file):
 
     # Check primer name
     if len(primer_splitted) != 2:
-        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}.\
-                         For detailes see READ.me")
+        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}."
+                         f"For detailes see READ.me")
     elif ("F" not in primer_splitted[1]) & ("f" not in primer_splitted[1]) & ("R" not in primer_splitted[1]) & ("r" not in primer_splitted[1]):
-        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}.\
-                         You need to specify primer's orientartion.\
-                         For detailes see READ.me")
+        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}."
+                         f"You need to specify primer's orientartion."
+                         f"For detailes see READ.me")
     #elif primer_splitted[0] not in primer_names:
         #raise ValueError(f"Error parsing filename {file}: wrong primer name {primer}.\
                             # For detailes see READ.me")
