@@ -46,6 +46,7 @@ def list_of_files_by_pattern(dir, extension, patterns):
                 files_to_process.append(file)
     return files_to_process
 
+
 def filename_parsing(file):
     sample_types = ["C", "CS", "F", "A", "P"]
     #primer_names = []
