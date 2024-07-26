@@ -6,4 +6,4 @@ from .make_consensus import *
 from .remove_files import *
 
 import pandas as pd
-pd.set_option('future.no_silent_downcasting', True)
+#pd.set_option('future.no_silent_downcasting', True)
