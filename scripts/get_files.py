@@ -13,7 +13,7 @@ def parse_arguments():
     parser.add_argument('--nthreads', '-nt', type=int, default=4, help='Number of threads for blastn search. Default value = 4')
     parser.add_argument('--trimming_quality', '-tq', type=int, default=15, help='Trimming quality. Default value = 15')
     parser.add_argument('--minlength', '-ml', type=int, default=50, help='Minimum length of consensus. Default value = 50')
-    parser.add_argument('--database', '-db', type=str, default="/home/lopatushka/db/16S_ribosomal_RNA/16S_ribosomal_RNA", help='Blastn database')
+    parser.add_argument('--database', '-db', type=str, help='Blastn database')
     parser.add_argument('--qcovus', '-qc', type=int, default=80, help='Query coverage threshold. Default value = 80')
     parser.add_argument('--pident', '-pi', type=int, default=95, help='Percent of identity threshold. Default value = 95')
     return parser.parse_args()
