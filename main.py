@@ -1,6 +1,8 @@
 from scripts import *
 
 def main():
+    print("Running program... Wait...")
+
     # Read command-line arguments
     args = parse_arguments()
     dir = args.directory
@@ -19,11 +21,11 @@ def main():
     # Check arguments provided - raising errors
     check_dir_exists(dir_path = dir)
     check_blast_database(database = database)
-    check_percent_value(value = trimming_quality)
-    check_percent_value(value = qcovus)
-    check_percent_value(value = pident)
-    check_int_value(value = minlength, upper_bound = 500) # check if value < 0 or > 500
-    check_int_value(value = nthreads, upper_bound = 300) # check if value < 0 or > 300
+    check_percent_value(value_name = "--trimming_quality", value = trimming_quality)
+    check_percent_value(value_name = "--qcovus", value = qcovus)
+    check_percent_value(value_name = "--pident", value = pident)
+    check_int_value(value_name = "--minlength", value = minlength, upper_bound = 500) # check if value < 0 or > 500
+    check_int_value(value_name = "--nthreads", value = nthreads, upper_bound = 300) # check if value < 0 or > 300
 
     # Parsing starts
     if parsing_mode == "auto":
@@ -171,6 +173,8 @@ def main():
 
     # Save report as .csv
     report.to_csv(dir + "/report.csv", sep='\t', index=False, header=True, encoding='utf-8', mode="a")
+
+    print("Done!")
 
 
 if __name__ == "__main__":
