@@ -28,13 +28,13 @@ class ArgumentError(Exception):
         self.message = message
         super().__init__(self.message)
 
-def check_percent_value(value):
+def check_percent_value(value_name, value):
      if (value < 0) | (value > 100):
-          raise ValueError(f"Variable {value} is incorrect. Exiting the program.")
+          raise ValueError(f"Variable {value_name} {value} is incorrect. Exiting the program.")
 
-def check_int_value(value, upper_bound):
+def check_int_value(value_name, value, upper_bound):
      if (value < 0) | (value > upper_bound):
-        raise ValueError(f"Variable {value} is incorrect. Exiting the program.")
+        raise ValueError(f"Variable {value_name} {value} is incorrect. Exiting the program.")
      
 
 def check_blast_database(database):
