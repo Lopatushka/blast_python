@@ -60,7 +60,7 @@ def filename_parsing(file):
     # Length array after splitting
     if len(filename_splitted) < 4:
         raise ValueError(f"Error parsing filename {file}.\
-                         Filename has to be started with Plate-YY-MM-DD and contain the following information:
+                         Filename has to be started with Plate-YY-MM-DD and contain the following information:\
                          sample_type, sample_name, primer_name and primer orientation.
                          For detailes see READ.me")
 
