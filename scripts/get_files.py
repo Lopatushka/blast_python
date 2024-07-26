@@ -84,11 +84,11 @@ def filename_parsing(file):
 
     # Check primer name
     if len(primer_splitted) != 2:
-        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}."
+        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}. "
                          f"For detailes see READ.me")
     elif ("F" not in primer_splitted[1]) & ("f" not in primer_splitted[1]) & ("R" not in primer_splitted[1]) & ("r" not in primer_splitted[1]):
-        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}."
-                         f"You need to specify primer's orientartion."
+        raise ValueError(f"Error parsing filename {file}: wrong primer name: {primer}. "
+                         f"You need to specify primer's orientartion. "
                          f"For detailes see READ.me")
     #elif primer_splitted[0] not in primer_names:
         #raise ValueError(f"Error parsing filename {file}: wrong primer name {primer}.\
