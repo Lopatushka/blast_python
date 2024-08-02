@@ -19,3 +19,9 @@ def remove_file(file_path):
             print(f"Error occurred: {e}")
     else:
         pass
+
+# dir = "../sanger_seq/240822"
+# pattern = ".fq"
+# path = os.path.join(dir, pattern)
+# matching_files = glob.glob(path)
+# print(matching_files)
