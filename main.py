@@ -57,7 +57,7 @@ def main():
 
             fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
             fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
-            remove_file_by_pattern(file['dir'], pattern="*.fq") # remove .fq files
+            remove_files_with_extension(dir = file['dir'], extension="fq") # remove .fq files
 
             # Make reverse complement if primer is reverse
             if ("R" in file['primer'].split("-")[1]) | ("r" in file['primer'].split("-")[1]):
@@ -117,7 +117,7 @@ def main():
             
             # Make alignment
             run_clustalw(merge_name)
-            remove_file_by_pattern(dir, '*.dnd') # delete .dnd files
+            remove_files_with_extension(dir = dir, extension="dnd") # remove .fq files
 
             # Make consensus
             aln_name = merge_name[:-2]+"aln" # path to aln file
