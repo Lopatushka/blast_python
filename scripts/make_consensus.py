@@ -104,7 +104,10 @@ def check_consensus_quality(fasta, threshold):
     try:
         consensus = SeqIO.read(fasta, "fasta")
         consensus_length = len(consensus.seq)
-        N_count = consensus.count("N")
+        N_count = N_count = consensus.count('R') + consensus.count('Y') + consensus.count('S')\
+                            + consensus.count('W') + consensus.count('K') + consensus.count('M')\
+                            + consensus.count('V') + consensus.count('H') + consensus.count('D')\
+                            + consensus.count('B') + consensus.count("N")
         N_precentage = np.round(100*N_count/consensus_length, 3)
         if N_precentage >= threshold:
             return False # bad consensus
