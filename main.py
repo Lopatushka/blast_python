@@ -90,13 +90,8 @@ def main():
                 pairs.append(file['path'])
         length = len(pairs)
 
-        # Check how much files have the unique sample name: 0, 1 or more then one
-        #if length == 0: # in theory it is impossible situation
-            #warnings.warn(f"There is no files with the sample name {sample_name}")
-            
         if length == 1:
             # Add info to report
-            #print(f"No consensus: single file for sample: {sample_name}")
             report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
 
             # Blastn search for 1 file
@@ -128,7 +123,6 @@ def main():
 
             # Check consensus quality
             if check_consensus_quality(consensus_name, threshold = consensus_quality): # good consensus
-                #print(f"Good consensus for sample: {sample_name}")
                 # Add info to report
                 report.loc[report["sample_name"] == sample_name, "is_consensus"] = True
 
@@ -142,14 +136,13 @@ def main():
                                       database=database, hits=hits, num_threads=nthreads)
                 
             else: # bad consensus
-                #print(f"Bad consensus for sample: {sample_name}")
                 # Add info to report
                 report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
 
                 # Blastn search for files in pairs independently
                 for file in pairs:
                     result = run_blastn(file, database, num_threads=nthreads)
-                    hits = blastn_results_processing(data=result, consensus_name=consensus_name,
+                    hits = blastn_results_processing(data=result, consensus_name=os.path.basename(file),
                                                     database=database, dir=dir,
                                                     qcovus_treshold=qcovus, pident_treshold=pident)
                     blast_aln = file[:-2] + 'txt' # path to blastn_aln file
