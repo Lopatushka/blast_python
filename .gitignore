@@ -13,3 +13,6 @@ scripts/__pycache__
 taxdb.btd
 taxdb.bti
 taxonomy4blast.sqlite3
+
+# Files
+./test.py
