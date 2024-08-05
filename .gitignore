@@ -4,12 +4,10 @@ test/
 scripts/server/
 scripts/__pycache__
 
-# Scripts
-./scripts/rename.sh
-./scripts/copy.sh
-./scripts/test.py
-
 # Taxonomy files
 taxdb.btd
 taxdb.bti
 taxonomy4blast.sqlite3
+
+# Files
+test.py
