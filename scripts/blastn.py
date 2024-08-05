@@ -15,7 +15,7 @@ def run_blastn(input_file, database, num_threads):
         return p1.stdout
     except subprocess.CalledProcessError as e:
         print(f"There is no match for query {input_file} in blastn database {database}")
-        print(f"Error message is: {e}")
+        #print(f"Error message is: {e}")
 
 def run_blastn_alignments(input_file, output_file, database, hits, num_threads):
     try:
@@ -23,7 +23,7 @@ def run_blastn_alignments(input_file, output_file, database, hits, num_threads):
         subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell = True, text=True)
     except subprocess.CalledProcessError as e:
         print(f"Error occured during blastn alignments run for query {input_file} and blastn database {database}")
-        print(f"Error message is: {e}")
+        #print(f"Error message is: {e}")
 
 def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_name=None, database=None, dir="./"):
     try:
