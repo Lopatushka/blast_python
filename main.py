@@ -33,8 +33,6 @@ def main():
     elif parsing_mode == "manual":
         ab1_files = list_of_files_by_pattern(dir=dir, extension="ab1", patterns=parsing_patterns)
     
-    #is_empty_variable(ab1_files, "ab1_files")
-
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
 
     # Initialize report dataframe
@@ -56,7 +54,6 @@ def main():
             report.loc[report["filename"] == file["filename"], "is_short"] = False
             fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
             fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
-            #remove_files_with_extension(dir = file['dir'], extension="fq") # remove .fq files
 
             # Make reverse complement if primer is reverse
             if ("R" in file['primer'].split("-")[1]) | ("r" in file['primer'].split("-")[1]):
@@ -75,8 +72,6 @@ def main():
         fa_files = list_of_files(dir, "fa") # full paths to .fa files
     elif blastn_mode == "manual":
         fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
-
-    #is_empty_variable(fa_files, "fa_files")
 
     data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
         
@@ -105,12 +100,12 @@ def main():
             
         else:
             # Merge files for alignment
-            merge_name = f'{dir}/{sample_name}.fa'
+            merge_name = f'{dir}/{sample_name}_merged.fa'
             merge_fasta_files(pairs, merge_name)
 
-            # Remove original files after merging to a single file
-            for item in pairs:
-                remove_file(item)
+            # # Remove original files after merging to a single file
+            # for item in pairs:
+            #     remove_file(item)
             
             # Make alignment
             run_clustalw(merge_name)
