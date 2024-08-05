@@ -80,7 +80,7 @@ def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.6):
             _count = column.count("-") # occurence of '-' in column
             column = column.replace("-", "") # delete "-" symbol from consensus     
             column += "-" *  _count # place '-' to the end of column
-            counter = Counter(column)
+            counter = Counter(column) # create a speicial dict
             most_common_residue, count = counter.most_common(1)[0]
             if count / num_sequences >= threshold:
                 consensus.append(most_common_residue)
@@ -104,7 +104,7 @@ def check_consensus_quality(fasta, threshold):
     try:
         consensus = SeqIO.read(fasta, "fasta")
         consensus_length = len(consensus.seq)
-        N_count = N_count = consensus.count('R') + consensus.count('Y') + consensus.count('S')\
+        N_count = consensus.count('R') + consensus.count('Y') + consensus.count('S')\
                             + consensus.count('W') + consensus.count('K') + consensus.count('M')\
                             + consensus.count('V') + consensus.count('H') + consensus.count('D')\
                             + consensus.count('B') + consensus.count("N")
