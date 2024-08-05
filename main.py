@@ -96,6 +96,7 @@ def main():
             
         if length == 1:
             # Add info to report
+            print(f"No consensus: single file for sample: {sample_name}")
             report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
 
             # Blastn search for 1 file
@@ -126,7 +127,8 @@ def main():
             get_custom_consensus_from_aln(aln_name, consensus_name, threshold=0.7)
 
             # Check consensus quality
-            if check_consensus_quality(consensus_name, threshold = consensus_quality):
+            if check_consensus_quality(consensus_name, threshold = consensus_quality): # good consensus
+                print(f"Good consensus for sample: {sample_name}")
                 # Add info to report
                 report.loc[report["sample_name"] == sample_name, "is_consensus"] = True
 
@@ -139,7 +141,8 @@ def main():
                 run_blastn_alignments(input_file=consensus_name, output_file=blast_aln,
                                       database=database, hits=hits, num_threads=nthreads)
                 
-            else:
+            else: # bad consensus
+                print(f"Bad consensus for sample: {sample_name}")
                 # Add info to report
                 report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
 
