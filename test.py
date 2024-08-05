@@ -8,11 +8,16 @@ from collections import Counter
 from Bio import AlignIO
 from Bio import SeqIO
 
-def get_seq_score(fastq):
-    record = SeqIO.read(fastq, "fastq")
-    seq = record.seq
-    score = record.letter_annotations["phred_quality"]
-    return (seq, score)
+def get_seqs_scores(fastq_files):
+    seqs = []
+    scores = []
+    fastq_parser = SeqIO.parse(fastq_files, "fastq")
+    for record in fastq_parser:
+        seq = record.seq
+        score = record.letter_annotations["phred_quality"]
+        seqs.append(seq)
+        scores.append(score)
+    return(seqs, scores)
 
 def get_custom_consensus_from_aln_score(aln_file, fq_files):
     try:
@@ -37,6 +42,7 @@ def get_custom_consensus_from_aln_score(aln_file, fq_files):
         alignment = AlignIO.read(aln_file, "clustal")
         num_sequences = len(alignment) # number of sequences
         alignment_length = alignment.get_alignment_length() # length of each sequences
+        seqs, scores = get_seqs_scores(fq_files)
         consensus = []
         
         for i in range(alignment_length):
@@ -66,7 +72,9 @@ def get_custom_consensus_from_aln_score(aln_file, fq_files):
 
 fq1 = "./test/Plate-2024-04-10_C_1_16S155-F1_A02_01_2_trimmed.fq"
 fq2 = "./test/Plate-2024-04-10_C_1_16SE1114.1096-R1_C02_03_2_trimmed.fq"
-fq = "./fq_files.fq"
+fq = "./test/fq_files.fq"
 
 
+
+print(get_seqs_scores(fq))
 
