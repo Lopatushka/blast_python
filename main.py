@@ -91,10 +91,10 @@ def main():
         length = len(pairs)
 
         # Check how much files have the unique sample name: 0, 1 or more then one
-        if length == 0: # in theory it is impossible situation
-            warnings.warn(f"There is no files with the sample name {sample_name}")
+        #if length == 0: # in theory it is impossible situation
+            #warnings.warn(f"There is no files with the sample name {sample_name}")
             
-        elif length == 1:
+        if length == 1:
             # Add info to report
             report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
 
