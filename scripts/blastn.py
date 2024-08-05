@@ -13,19 +13,17 @@ def run_blastn(input_file, database, num_threads):
         p1 = subprocess.run(command, stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE, check=True, shell = True, text=True)
         if not p1.stdout:
-            print(f"There is no match for query {input_file} in blastn database {database}")
+            print(f"Error in run_blastn: file {input_file} is empty.")
         return p1.stdout
     except subprocess.CalledProcessError as e:
-        print(f"There is no match for query {input_file} in blastn database {database}")
-        #print(f"Error message is: {e}")
+        print(f"Error in run_blastn: no match for query {input_file} in blastn database {database}")
 
 def run_blastn_alignments(input_file, output_file, database, hits, num_threads):
     try:
         command = f'blastn -query {input_file} -db {database} -num_threads {num_threads} -taxids {hits} -outfmt 0 -out {output_file}'
         subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell = True, text=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error occured during blastn alignments run for query {input_file} and blastn database {database}")
-        #print(f"Error message is: {e}")
+        print(f"Error occured during run_blastn_alignments for query {input_file} and blastn database {database}")
 
 def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_name=None, database=None, dir="./"):
     try:
