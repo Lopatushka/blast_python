@@ -51,16 +51,24 @@ def run_clustalw(input_fasta):
     except subprocess.CalledProcessError as e:
         print(f"Error occured during clustalw run for file {input_fasta}. Error message: {e}")
 
-def get_seqs_scores(fastq_files):
+def get_info_from_fastqs(fastq_files):
+    ids = []
+    descriptions = []
     seqs = []
     scores = []
     fastq_parser = SeqIO.parse(fastq_files, "fastq")
     for record in fastq_parser:
+        id = record.id
+        description = record.description
         seq = record.seq
         score = record.letter_annotations["phred_quality"]
+
+        ids.append(id)
+        descriptions.append(description)
         seqs.append(seq)
         scores.append(score)
-    return(seqs, scores)
+
+    return(ids, descriptions, seqs, scores)
 
 def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.6):
     try:
