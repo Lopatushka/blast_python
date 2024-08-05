@@ -29,11 +29,11 @@ def main():
 
     # Parsing starts
     if parsing_mode == "auto":
-        ab1_files = list_of_files(dir, "ab1") # full paths to ab1 files
+        ab1_files = list_of_files(dir, "ab1") # full paths to ab1 filesq
     elif parsing_mode == "manual":
         ab1_files = list_of_files_by_pattern(dir=dir, extension="ab1", patterns=parsing_patterns)
     
-    is_empty_variable(ab1_files, "ab1_files")
+    #is_empty_variable(ab1_files, "ab1_files")
 
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
 
@@ -54,10 +54,9 @@ def main():
         if os.path.isfile(fq_trimmed) and not_empty_file(fq_trimmed):
             # Add info to report
             report.loc[report["filename"] == file["filename"], "is_short"] = False
-
             fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
             fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
-            remove_files_with_extension(dir = file['dir'], extension="fq") # remove .fq files
+            #remove_files_with_extension(dir = file['dir'], extension="fq") # remove .fq files
 
             # Make reverse complement if primer is reverse
             if ("R" in file['primer'].split("-")[1]) | ("r" in file['primer'].split("-")[1]):
@@ -68,6 +67,8 @@ def main():
         else:
             # Add info to report
             report.loc[report["filename"] == file["filename"], "is_short"] = True
+    
+    remove_files_with_extension(dir = dir, extension="fq") # remove .fq files
 
     '''2nd cycle - make alignment, build consensus, blast'''
     if blastn_mode == "auto":
@@ -75,10 +76,10 @@ def main():
     elif blastn_mode == "manual":
         fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
 
-    is_empty_variable(fa_files, "fa_files")
+    #is_empty_variable(fa_files, "fa_files")
 
     data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
-    
+        
     sample_names = np.unique([file['sample_name'] for file in data if file]).tolist() #  store unique sample names in array
     
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
@@ -117,7 +118,7 @@ def main():
             
             # Make alignment
             run_clustalw(merge_name)
-            remove_files_with_extension(dir = dir, extension="dnd") # remove .fq files
+            remove_files_with_extension(dir = dir, extension="dnd") # remove .dnd files
 
             # Make consensus
             aln_name = merge_name[:-2]+"aln" # path to aln file
