@@ -8,27 +8,16 @@ from collections import Counter
 from Bio import AlignIO
 from Bio import SeqIO
 
-def check_consensus_quality(fasta, threshold):
+def run_blastn(input_file, database, num_threads):
     try:
-        consensus = SeqIO.read(fasta, "fasta")
-        consensus_length = len(consensus.seq)
-        N_count = consensus.count('R') + consensus.count('Y') + consensus.count('S')\
-              + consensus.count('W') + consensus.count('K') + consensus.count('M')\
-                + consensus.count('V') + consensus.count('H') + consensus.count('D') + consensus.count('B') + consensus.count("N")
-        N_precentage = np.round(100*N_count/consensus_length, 3)
-        print(N_precentage)
-        if N_precentage >= threshold:
-            return False # bad consensus
-        else:
-            return True # good consensus
-    except FileNotFoundError as e:
-        print(f"Error occured with file processing {fasta}: {e}")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
+        command = f'blastn -query {input_file} -db {database} -num_threads {num_threads}\
+            -outfmt "6 qseqid sacc staxid evalue pident mismatch gaps qcovus length sscinames"'
+        p1 = subprocess.run(command, stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE, check=True, shell = True, text=True)
+        if not p1.stdout:
+            print(f"There is no match for query {input_file} in blastn database {database}")
+        return p1.stdout
+    except subprocess.CalledProcessError as e:
+        print(f"There is no match for query {input_file} in blastn database {database}")
 
-path = "../sanger_seq/310724/fasta/13A_consensus.fa"
-threshold = 10
-
-s = '../sanger_seq/310724/Plate-2024-07-31_CS_7A_strep.sp-R2_D02_04_trimmed_rc.fa'
-print(os.path.basename(s))
-
+print(run_blastn("./test/test.fa" , "../db/16S_ribosomal_RNA/16S_ribosomal_RNA", 4))
