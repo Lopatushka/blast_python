@@ -103,11 +103,6 @@ def main():
             merge_name = f'{dir}/{sample_name}_merged.fa'
             merge_fasta_files(pairs, merge_name)
 
-            # # Remove original files after merging to a single file
-            # for item in pairs:
-            #     remove_file(item)
-            
-            # Make alignment
             run_clustalw(merge_name)
             remove_files_with_extension(dir = dir, extension="dnd") # remove .dnd files
 
