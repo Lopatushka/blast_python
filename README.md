@@ -12,14 +12,24 @@ This package makes automated bulk Sanger sequencing data analysis.
 + CLUSTAL 2.1
 + BLAST 2.15.0+
 
+## Arguments
+To get information about arguments use this:
+```bash
+python main.py --help
+```
+ or this command:
+ ```bash
+python main.py -h
+```
+
 ## Algorithm
 ### Trimming Sanger sequencing reads
 Trimming is performed using BBMap software from both right and left ends by Phred algotithm with following arguments:
 
-+ --trimming_quality specifies trimq argument  (default is 15)
++ --trimming_quality specifies trimq argument  (default is 10)
 + --minlength specifies minlength argument (default is 50)
 
-For details see BBMap manual.
+For details see *BBMap manual*.
 
 ### Names of .ab1 files
 There is the template for .ab1 files naming:
@@ -27,28 +37,28 @@ There is the template for .ab1 files naming:
 **Plate-YYYY-ММ-DD_type_name_primer-orientation_extra_information.ab1**
 
 1. YYYY-ММ-DD - date of Sanger sequencing
-2. type - type of sample: C - culture, P - plasmid etc.
-3. name - name of sample: 122, 156-1000bp,  etc.
+2. type - type of sample: C - culture, P - plasmid, CS - culture specificity, F - fecal sample, A - amplicon
+3. name - name of sample: 122, 156-1000bp,  350-Strepto, 300-Coll, etc.
 4. primer - name of primer: R.gnavus, 16S155, etc.
 5. orientation - orientation of primer: F, R
 6. extra_information - doesn't include in the processing of .ab1 filenames
 
-For details see test directory.
+For details see *test* directory.
 
 ### Consensus finding
-Consensus is built using custom defined function.
-If the number of 'N' in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 15%), consensus is qualified is bad.
+The programm is searching for all files in the directory (--directory) with the identical **name** and trying to build consensus using custom defined function.
+If the number of 'N' or degenerate nucleotides in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 10%), consensus is qualified is bad.
 In this case, blastn search will be performed for F and R reads independently.
-After consensus building the program generate report.csv file with information about each read, its trimming consensus status.
+After consensus building, the program generate **report.csv** file with information about each read, its trimming and consensus status.
 
 ### Blastn search
-Blastn search is performed against locally installed blast database. You need to specify the path to this database (--database)
-To speed up analysis on server you also need to specify --nthreads argument (defult is 4).
-Resalts are stored in ./blastn.csv table.
+Blastn search is performed against locally installed blast database. You need to specify the path to this database (--database).
+To speed up analysis on server you also need to specify --nthreads argument (default is 4).
+Resalts are stored in **blastn.csv** table.
 Results are sorted by pident and filtered subsequently by query coverage (--qcovus, default = 80%) and percent of identity (--pident, default = 95%).
 If there is no hits after filtration, the program shows first five hits.
 
-For details see blastn manual.
+For details see *blastn manual*.
 
 ## Usage
 To use the package launch the program from the commande line.
@@ -106,11 +116,11 @@ Check job status. Example:
 squeue -u elopatuhina
 ```
 
-*Optional*. To monitor job status you can also use an axualiry script **squeue_check.sh** (in *server* folder)
+*Optional*. To monitor job status you can also use an axualiry script **clock.sh** (in *server* folder)
 Before usage you can modify number of *iterations* and nnumber of seconds in delay * sleep 5s* in **vi** text editor.
 Run this:
 ```bash
-bash ./server/squeue_check.sh
+bash ./server/clock.sh
 ```
 
 After job completing check:
@@ -122,7 +132,7 @@ To exit server run:
 exit
 ```
 
-For more details read **slurm** documentation.
+For more details read *slurm* documentation.
 
 ## Nucleotide Blast database
 You can use a ready-made NCBI blast database or build your own database.
@@ -150,7 +160,7 @@ To build your own blast database with taxonomy information you need to follow th
 4. Download taxdb.bti, taxdb.btd, and taxonomy4blast.sqlite3 files and put them to the same directory where the blast database is located.
 5. Check your blast database
 
-For details see BLAST+ manual.
+For details see *BLAST+ manual*.
 
 ### 1. Fasta sequence downloading
 You can use both web version of NCBI Nucleotide database to download fasta sequences or E-Utilities (esearch).
@@ -166,7 +176,7 @@ esearch -db nuccore -query "16S[All Fields] AND rRNA[All Fields]
                             | efetch -format fasta > files.fa
 ```
 
-For details see E-Utilities manual, esearch -help.
+For details see *E-Utilities manual*, *esearch -help*.
 
 ### 2. Taxonomy mask file
 To add information about taxonomy to blast database you need to create a special file with two columns:
@@ -217,10 +227,4 @@ Use the following command for blast database checking:
 blastdbcmd -db my_databse -info blastdbcmd -db my_databse -tax_info
 ```
 
-For details see: BLAST+ manual, blastdbcmd -help
-
-
-
-
-
-
+For details see: *BLAST+ manual*, *blastdbcmd -help*
