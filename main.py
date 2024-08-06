@@ -100,7 +100,7 @@ def main():
             
         else:
             # Merge files for alignment
-            merge_name = f'{dir}/{sample_name}_merged.fa'
+            merge_name = f'{dir}/{sample_name}.fa'
             merge_fasta_files(pairs, merge_name)
 
             run_clustalw(merge_name)
@@ -109,7 +109,7 @@ def main():
             # Make consensus
             aln_name = merge_name[:-2]+"aln" # path to aln file
             consensus_name = aln_name[:-4] + "_consensus.fa" # path to consensus file
-            get_custom_consensus_from_aln(aln_name, consensus_name, threshold=0.7)
+            get_custom_consensus_from_aln(aln_name, consensus_name, threshold=0.6)
 
             # Check consensus quality
             if check_consensus_quality(consensus_name, threshold = consensus_quality): # good consensus
