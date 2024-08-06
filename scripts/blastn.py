@@ -7,13 +7,13 @@ import warnings
 from .errors_catching import check_files_exist
 
 def run_blastn(input_file, database, num_threads):
+    filename = os.path.basename(input_file)
+    database_name = database.split("/")[-1]
     try:
         command = f'blastn -query {input_file} -db {database} -num_threads {num_threads}\
             -outfmt "6 qseqid sacc staxid evalue pident mismatch gaps qcovus length sscinames"'
         p1 = subprocess.run(command, stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE, check=True, shell = True, text=True)
-        filename = os.path.basename(input_file)
-        database_name = database.split("/")[-1]
         if not p1.stdout:
             print(f"Error in run_blastn: no match for query {filename} in blastn database {database_name}")
             #print(f"Error in run_blastn: file {filename} is empty.")
@@ -22,13 +22,13 @@ def run_blastn(input_file, database, num_threads):
         print(f"Error in run_blastn: no match for query {filename} in blastn database {database_name}")
 
 def run_blastn_alignments(input_file, output_file, database, hits, num_threads):
+    filename = os.path.basename(input_file)
+    database_name = database.split("/")[-1]
     try:
         command = f'blastn -query {input_file} -db {database} -num_threads {num_threads} -taxids {hits} -outfmt 0 -out {output_file}'
         subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True, shell = True, text=True)
-        filename = os.path.basename(input_file)
-        database_name = database.split("/")[-1]
     except subprocess.CalledProcessError as e:
-        print(f"Error occured during run_blastn_alignments for query {filename} and blastn database {database_name}")
+        print(f"Error in run_blastn_alignments for query {filename} and blastn database {database_name}")
 
 def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_name=None, database=None, dir="./"):
     try:
@@ -81,4 +81,4 @@ def blastn_results_processing(data, qcovus_treshold, pident_treshold, consensus_
         
         return taxids
     except Exception as e:
-        print(f"Unexpected erroe occured: {e}")
+        print(f"Unexpected error occured: {e}")
