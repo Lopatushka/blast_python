@@ -51,6 +51,25 @@ def run_clustalw(input_fasta):
     except subprocess.CalledProcessError as e:
         print(f"Error occured during clustalw run for file {input_fasta}. Error message: {e}")
 
+def get_info_from_fastqs(fastq_files):
+    ids = []
+    descriptions = []
+    seqs = []
+    scores = []
+    fastq_parser = SeqIO.parse(fastq_files, "fastq")
+    for record in fastq_parser:
+        id = record.id
+        description = record.description
+        seq = record.seq
+        score = record.letter_annotations["phred_quality"]
+
+        ids.append(id)
+        descriptions.append(description)
+        seqs.append(seq)
+        scores.append(score)
+
+    return(ids, descriptions, seqs, scores)
+
 def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.6):
     try:
         # IUPAC nucleotide codes
@@ -80,7 +99,7 @@ def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.6):
             _count = column.count("-") # occurence of '-' in column
             column = column.replace("-", "") # delete "-" symbol from consensus     
             column += "-" *  _count # place '-' to the end of column
-            counter = Counter(column)
+            counter = Counter(column) # create a speicial dict
             most_common_residue, count = counter.most_common(1)[0]
             if count / num_sequences >= threshold:
                 consensus.append(most_common_residue)
@@ -104,7 +123,7 @@ def check_consensus_quality(fasta, threshold):
     try:
         consensus = SeqIO.read(fasta, "fasta")
         consensus_length = len(consensus.seq)
-        N_count = N_count = consensus.count('R') + consensus.count('Y') + consensus.count('S')\
+        N_count = consensus.count('R') + consensus.count('Y') + consensus.count('S')\
                             + consensus.count('W') + consensus.count('K') + consensus.count('M')\
                             + consensus.count('V') + consensus.count('H') + consensus.count('D')\
                             + consensus.count('B') + consensus.count("N")
