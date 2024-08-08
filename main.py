@@ -35,9 +35,11 @@ def main():
     
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
 
-    # Initialize report dataframe
+    # Initialize report dataframe, add two additional columns
     report = pd.DataFrame(data)
-
+    report["is_long"] = False
+    report["is_consensus"] = False
+    
     '''1st cycle - trimming, make revese complement'''
     for file in data:
         # Generation of fastq files
@@ -51,7 +53,7 @@ def main():
         # Convert trimmed fastq file to fasta file if exists AND not empty
         if os.path.isfile(fq_trimmed) and not_empty_file(fq_trimmed):
             # Add info to report
-            report.loc[report["filename"] == file["filename"], "is_short"] = False
+            report.loc[report["filename"] == file["filename"], "is_long"] = True
             fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
             fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
 
@@ -63,7 +65,7 @@ def main():
                 remove_file(fa_trimmed) # remove original fasta file
         else:
             # Add info to report
-            report.loc[report["filename"] == file["filename"], "is_short"] = True
+            report.loc[report["filename"] == file["filename"], "is_long"] = False
     
     remove_files_with_extension(dir = dir, extension="fq") # remove .fq files
 
@@ -73,8 +75,7 @@ def main():
     elif blastn_mode == "manual":
         fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
 
-    data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
-        
+    data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files  
     sample_names = np.unique([file['sample_name'] for file in data if file]).tolist() #  store unique sample names in array
     
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
