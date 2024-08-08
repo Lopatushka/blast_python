@@ -6,4 +6,5 @@ from .make_consensus import *
 from .remove_files import *
 
 import pandas as pd
+import warnings
 #pd.set_option('future.no_silent_downcasting', True)

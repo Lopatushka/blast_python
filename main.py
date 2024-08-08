@@ -75,7 +75,12 @@ def main():
     elif blastn_mode == "manual":
         fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
 
-    data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files  
+    data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
+    if not data:
+        warnings.warn("No files for blastn search since they are all low-quality. You can try to decrease the --minlength value.")
+        print("Done!")
+        return None
+    
     sample_names = np.unique([file['sample_name'] for file in data if file]).tolist() #  store unique sample names in array
     
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
