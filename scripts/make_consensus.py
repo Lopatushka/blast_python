@@ -95,10 +95,8 @@ def get_custom_consensus_from_aln(aln_file, consensus_fa, threshold=0.6):
         alignment_length = alignment.get_alignment_length() # length of each sequences
         consensus = []
         for i in range(alignment_length):
-            column = alignment[:, i]
-            _count = column.count("-") # occurence of '-' in column
-            column = column.replace("-", "") # delete "-" symbol from consensus     
-            column += "-" *  _count # place '-' to the end of column
+            entire_column = alignment[:, i]
+            column = entire_column.replace("-", "") # delete gaps
             counter = Counter(column) # create a speicial dict
             most_common_residue, count = counter.most_common(1)[0]
             if count / num_sequences >= threshold:
