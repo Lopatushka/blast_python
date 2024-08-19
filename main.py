@@ -80,7 +80,7 @@ def main():
         print("Done!")
         return None
     
-    sample_names = np.unique([file['sample_name_primer'] for file in data if file]).tolist() #  store unique sample names_primers in array
+    sample_names = np.unique([file['sample_name_primer'] for file in data if file]).tolist() #  store unique sample_names_primers in array
     
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
     for sample_name in sample_names:
@@ -92,7 +92,7 @@ def main():
 
         if length == 1:
             # Add info to report
-            report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
+            report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = False
 
             # Blastn search for 1 file
             result = run_blastn(pairs[0], database, num_threads=nthreads)
@@ -119,7 +119,7 @@ def main():
             # Check consensus quality
             if check_consensus_quality(consensus_name, threshold = consensus_quality): # good consensus
                 # Add info to report
-                report.loc[report["sample_name"] == sample_name, "is_consensus"] = True
+                report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = True
 
                 # Blastn search for consenus
                 result = run_blastn(consensus_name, database, num_threads=nthreads)
@@ -132,7 +132,7 @@ def main():
                 
             else: # bad consensus
                 # Add info to report
-                report.loc[report["sample_name"] == sample_name, "is_consensus"] = False
+                report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = False
 
                 # Blastn search for files in pairs independently
                 for file in pairs:
