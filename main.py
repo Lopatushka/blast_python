@@ -59,7 +59,6 @@ def main():
 
             # Make reverse complement if primer is reverse
             if ("R" in file['primer'].split("-")[1]) | ("r" in file['primer'].split("-")[1]):
-            #if "R" in file['primer']:
                 fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
                 reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
                 remove_file(fa_trimmed) # remove original fasta file
@@ -81,13 +80,13 @@ def main():
         print("Done!")
         return None
     
-    sample_names = np.unique([file['sample_name'] for file in data if file]).tolist() #  store unique sample names in array
+    sample_names = np.unique([file['sample_name_primer'] for file in data if file]).tolist() #  store unique sample names_primers in array
     
     # Store paths to .fa files with the identical sample names in array to build consensus if possible
     for sample_name in sample_names:
         pairs = [] 
         for file in data:
-            if file['sample_name'] == sample_name:
+            if file['sample_name_primer'] == sample_name:
                 pairs.append(file['path'])
         length = len(pairs)
 
