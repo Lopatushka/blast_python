@@ -46,9 +46,8 @@ There is the template for .ab1 files naming:
 For details see *test* directory.
 
 ### Consensus finding
-The programm is searching for all files in the directory (--directory) with the identical **name** and **primer name** (e.g. 122_R.gnavus, 1_16Slong)trying to build consensus using custom defined function.
-If the number of 'N' or degenerate nucleotides in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 10%), consensus is qualified is bad.
-In this case, blastn search will be performed for F and R reads independently.
+The programm is searching for all files in the directory (--directory) with the identical **name** and **primer name** (e.g. 122_R.gnavus, 1_16Slong) trying to build consensus using custom defined function.
+If the number of 'N' or degenerate nucleotides in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 10%), consensus is qualified is bad. In this case, blastn search will be performed for F and R reads independently.
 After consensus building, the program generate **report.csv** file with information about each read, its trimming and consensus status.
 
 ### Blastn search
