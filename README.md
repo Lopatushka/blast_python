@@ -38,17 +38,16 @@ There is the template for .ab1 files naming:
 
 1. YYYY-ММ-DD - date of Sanger sequencing
 2. type - type of sample: C - culture, P - plasmid, CS - culture specificity, F - fecal sample, A - amplicon
-3. name - name of sample: 122, 156-1000bp,  350-Strepto, 300-Coll, etc.
-4. primer - name of primer: R.gnavus, 16S155, etc.
+3. name - name of sample: 122, 156-1000bp, etc.
+4. primer - name of primer: R.gnavus, 16Slong, etc.
 5. orientation - orientation of primer: F, R
 6. extra_information - doesn't include in the processing of .ab1 filenames
 
 For details see *test* directory.
 
 ### Consensus finding
-The programm is searching for all files in the directory (--directory) with the identical **name** and trying to build consensus using custom defined function.
-If the number of 'N' or degenerate nucleotides in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 10%), consensus is qualified is bad.
-In this case, blastn search will be performed for F and R reads independently.
+The programm is searching for all files in the directory (--directory) with the identical **name** and **primer name** (e.g. 122_R.gnavus, 1_16Slong) trying to build consensus using custom defined function.
+If the number of 'N' or degenerate nucleotides in consensus file exceeds consensus_quality threshold (--consensus_quality) (default = 10%), consensus is qualified is bad. In this case, blastn search will be performed for F and R reads independently.
 After consensus building, the program generate **report.csv** file with information about each read, its trimming and consensus status.
 
 ### Blastn search

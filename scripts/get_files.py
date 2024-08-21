@@ -83,6 +83,9 @@ def filename_parsing(file):
         # Get primer name
         primer = filename_splitted[3]
         primer_splitted = primer.split("-")
+        primer_name = primer_splitted[0]
+        primer_orientation = primer_splitted[1]
+        sample_name_primer = sample_name + "_" + primer_name
 
         # Check primer name
         if len(primer_splitted) != 2:
@@ -106,6 +109,7 @@ def filename_parsing(file):
                     'sample_type': sample_type,
                     'sample_name': sample_name,
                     'primer': primer,
+                    'sample_name_primer':sample_name_primer,
                     'path': file,
                     'dir': dir}
     except ValueError as e:
