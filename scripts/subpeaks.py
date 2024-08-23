@@ -75,11 +75,11 @@ def subpeaks(path_to_json, phred_threshold = 15, subpeak_length = 5):
 
 
 # path_to_ab1 = "./test/Plate-2024-04-10_C_1_16Slong-F1_A02_01_2.ab1"
-path_to_save = "./test/res4.json"
+#path_to_save = "./test/res4.json"
 # run_tracy(path_to_ab1, path_to_save, peak_ratio = 0.4)
 
-is_subpeaks, subpeaks_positions = subpeaks(path_to_save)
-print(subpeaks_positions)
+#is_subpeaks, subpeaks_positions = subpeaks(path_to_save)
+#print(subpeaks_positions)
 
 
 
