@@ -1,4 +1,28 @@
 import json
+import subprocess
+
+def run_tracy(path_to_ab1, path_to_save, peak_ratio=0.5):
+    """
+    Executes the Tracy basecalling tool on an AB1 file and saves the output.
+
+    Parameters:
+    path_to_ab1 (str): Path to the AB1 file that needs to be basecalled.
+    path_to_save (str): Path where the output of the basecalling should be saved.
+    peak_ratio (float): The peak ratio threshold for Tracy. Defaults to 0.5.
+
+    Returns:
+    None: This function does not return any value. It either completes successfully or prints an error message.
+
+    Raises:
+    subprocess.CalledProcessError: If the Tracy command fails, the exception is caught, and an error message is printed.
+    """
+    try:
+        peak_ratio = str(peak_ratio)
+        trim = str(trim)
+        command = f"tracy basecall -f json -p {peak_ratio} -o {path_to_save} {path_to_ab1}"
+        subprocess.run(command, capture_output=True, check=True, shell = True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error occured during tracy run for file {path_to_ab1}. Error message: {e}")
 
 def subpeaks(path_to_json, phred_threshold = 15, subpeak_length = 5):
     """
@@ -49,10 +73,14 @@ def subpeaks(path_to_json, phred_threshold = 15, subpeak_length = 5):
             count = 0
     return is_subpeaks, subpeaks_positions
 
-        
-# path = "test/results.json"
-# is_subpeaks, subpeaks_positions = subpeaks(path)
-# print(subpeaks_positions)
+
+# path_to_ab1 = "./test/Plate-2024-04-10_C_1_16Slong-F1_A02_01_2.ab1"
+path_to_save = "./test/res4.json"
+# run_tracy(path_to_ab1, path_to_save, peak_ratio = 0.4)
+
+is_subpeaks, subpeaks_positions = subpeaks(path_to_save)
+print(subpeaks_positions)
+
 
 
 
