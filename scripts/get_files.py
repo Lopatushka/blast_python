@@ -19,6 +19,19 @@ def parse_arguments():
     return parser.parse_args()
 
 def list_of_files(dir, extension):
+        '''
+        Description:
+            This function returns a list of full file paths in a given directory that have a specific file extension.
+            The function iterates over all files in the directory and filters out those that do not match the specified extension.
+
+        Parameters:
+            dir (str): The path to the directory where the search will be performed.
+            extension (str): The file extension to filter files (e.g., 'txt', 'jpg'). Files with this extension will be returned.
+
+        Returns:
+            list: A list containing full file paths of the files with the specified extension found in the directory.
+                If the directory is not found or other errors occur, an empty list is returned.
+        '''
         try:
             files = []
             for item in os.listdir(dir):
@@ -38,6 +51,22 @@ def list_of_files(dir, extension):
             return []
 
 def list_of_files_by_pattern(dir, extension, patterns):
+    '''
+    Description:
+        This function returns a list of files from a specified directory that match both a given file extension and 
+        a set of patterns. It builds on top of the `list_of_files` function, which retrieves all files with the specified 
+        extension. Then, it filters these files to return only those whose filenames contain one or more of the given patterns.
+
+    Parameters:
+        dir (str): The path to the directory where the search will be performed.
+        extension (str): The file extension to filter files (e.g., 'txt', 'csv'). Only files with this extension are considered.
+        patterns (list): A list of strings (patterns) to match against filenames. Files that contain any of these patterns 
+                         in their filename will be included in the returned list.
+
+    Returns:
+        list: A list of file paths that match both the specified extension and the provided patterns.
+              If no files match, an empty list is returned.
+    '''
     files = list_of_files(dir, extension=extension) # get all files with reqired extension
     files_to_process = []
     for pattern in patterns:
@@ -98,7 +127,7 @@ def filename_parsing(file):
         #elif primer_splitted[0] not in primer_names:
             #raise ValueError(f"Error parsing filename {file}: wrong primer name {primer}.\
                                 # For detailes see READ.me")
-
+        
         # Get path to dir
         dir = "/".join(file.split("/")[:-1])
         # Check dir and parsing prosedure in general
