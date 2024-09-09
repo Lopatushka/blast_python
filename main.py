@@ -64,7 +64,7 @@ def main():
                 remove_file(fa_trimmed) # remove original fasta file
         else:
             # Add info to report
-            report.loc[report["filename"] == file["filename"], "is_long"] = False
+            report.loc[report["filename"] == file["filename"], "is_long"] = False # pass
     
     remove_files_with_extension(dir = dir, extension="fq") # remove .fq files
 
