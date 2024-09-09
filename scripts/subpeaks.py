@@ -18,7 +18,6 @@ def run_tracy(path_to_ab1, path_to_save, peak_ratio=0.5):
     """
     try:
         peak_ratio = str(peak_ratio)
-        trim = str(trim)
         command = f"tracy basecall -f json -p {peak_ratio} -o {path_to_save} {path_to_ab1}"
         subprocess.run(command, capture_output=True, check=True, shell = True)
     except subprocess.CalledProcessError as e:
