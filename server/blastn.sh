@@ -35,6 +35,7 @@ N_THREADS=$TOTAL_CPUS_ALLOCATED
 # Print command-line variables
 echo "Path to directory with .ab1 files: $DIR"
 echo "Database: $DB"
+echo "Number of threads: $N_THREADS"
 echo
 
 # Run program
