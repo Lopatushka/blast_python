@@ -81,89 +81,93 @@ def main():
     # Store unique sample_names_primers in array
     sample_names = np.unique([file['sample_name_primer'] for file in data if file]).tolist()
     
-    # # Store paths to .fa files with the identical sample names in array to build consensus if possible
-    # for sample_name in sample_names:
-    #     pairs = [] 
-    #     for file in data:
-    #         if file['sample_name_primer'] == sample_name:
-    #             pairs.append(file['path'])
-    #     length = len(pairs)
+    # Store paths to FASTA files with the identical sample names in array to build consensus if possible
+    for sample_name in sample_names:
+        pairs = [] 
+        for file in data:
+            if file['sample_name_primer'] == sample_name:
+                pairs.append(file['path'])
+        length = len(pairs)
 
-    #     if length == 1:
-    #         # Add info to report
-    #         report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = False
+        # ONLY ONE FASTA file with this particular 'sample_name_primer'
+        if length == 1:
+            # Add info to report
+            #report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = False
 
-    #         # Blastn search for 1 file
-    #         result = run_blastn(pairs[0], database, num_threads=nthreads)
-    #         hits = blastn_results_processing(data=result, consensus_name=pairs[0],
-    #                                         database=database, dir=dir,
-    #                                         qcovus_treshold=qcovus, pident_treshold=pident)
-    #         blast_aln = f'{dir}/blast_aln_{sample_name}.txt' # path to blastn_aln file
-    #         run_blastn_alignments(input_file=pairs[0], output_file=blast_aln,
-    #                               database=database, hits=hits, num_threads=nthreads)
+            # BLASTN search
+            result = run_blastn(pairs[0], database, num_threads=nthreads)
+            hits = blastn_results_processing(data=result, consensus_name=pairs[0],
+                                            database=database, dir=dir,
+                                            qcovus_treshold=qcovus, pident_treshold=pident)
+            blast_aln = f'{dir}/blast_aln_{sample_name}.txt' # path to blastn_aln file
+            run_blastn_alignments(input_file=pairs[0], output_file=blast_aln,
+                                  database=database, hits=hits, num_threads=nthreads)
             
-    #     else:
-    #         # Merge files for alignment
-    #         merge_name = f'{dir}/{sample_name}.fa'
-    #         merge_fasta_files(pairs, merge_name)
+        # MORE THEN ONE FASTA file with this particular 'sample_name_primer'
+        else:
+            # Merge files for alignment
+            merge_name = f'{dir}/{sample_name}.fa'
+            merge_fasta_files(pairs, merge_name)
 
-    #         run_clustalw(merge_name)
-    #         remove_files_with_extension(dir = dir, extension="dnd") # remove .dnd files
+            # Make alignement
+            run_clustalw(merge_name)
+            remove_files_with_extension(dir = dir, extension="dnd") # remove .dnd files
 
-    #         # Make consensus
-    #         aln_name = merge_name[:-2]+"aln" # path to aln file
-    #         consensus_name = aln_name[:-4] + "_consensus.fa" # path to consensus file
-    #         get_custom_consensus_from_aln(aln_name, consensus_name, threshold=0.6)
+            # Make consensus
+            aln_name = merge_name[:-2]+"aln" # path to aln file
+            consensus_name = aln_name[:-4] + "_consensus.fa" # path to consensus file
+            get_custom_consensus_from_aln(aln_name, consensus_name, threshold=0.6)
 
-    #         # Check consensus quality
-    #         if check_consensus_quality(consensus_name, threshold = consensus_quality): # good consensus
-    #             # Add info to report
-    #             report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = True
+            # Check consensus quality
+            # If GOOD consensus
+            if check_consensus_quality(consensus_name, threshold = consensus_quality): 
+                # Add info to report
+                report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = True
 
-    #             # Blastn search for consenus
-    #             result = run_blastn(consensus_name, database, num_threads=nthreads)
-    #             hits = blastn_results_processing(data=result, consensus_name=consensus_name,
-    #                                             database=database, dir=dir,
-    #                                             qcovus_treshold=qcovus, pident_treshold=pident)
-    #             blast_aln = f'{dir}/blast_aln_{sample_name}.txt' # path to blastn_aln file
-    #             run_blastn_alignments(input_file=consensus_name, output_file=blast_aln,
-    #                                   database=database, hits=hits, num_threads=nthreads)
-                
-    #         else: # bad consensus
-    #             # Add info to report
-    #             report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = False
+                # BLASTN search for consenus
+                result = run_blastn(consensus_name, database, num_threads=nthreads)
+                hits = blastn_results_processing(data=result, consensus_name=consensus_name,
+                                                database=database, dir=dir,
+                                                qcovus_treshold=qcovus, pident_treshold=pident)
+                blast_aln = f'{dir}/blast_aln_{sample_name}.txt' # path to blastn_aln file
+                run_blastn_alignments(input_file=consensus_name, output_file=blast_aln,
+                                      database=database, hits=hits, num_threads=nthreads)
+            # If BAD consensus
+            else:
+            #     # Add info to report
+            #     report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = False
 
-    #             # Blastn search for files in pairs independently
-    #             for file in pairs:
-    #                 result = run_blastn(file, database, num_threads=nthreads)
-    #                 hits = blastn_results_processing(data=result, consensus_name=os.path.basename(file),
-    #                                                 database=database, dir=dir,
-    #                                                 qcovus_treshold=qcovus, pident_treshold=pident)
-    #                 blast_aln = file[:-2] + 'txt' # path to blastn_aln file
-    #                 run_blastn_alignments(input_file=file, output_file=blast_aln,
-    #                                       database=database, hits=hits, num_threads=nthreads)
+                # BLASTN search for files in pairs independently
+                for file in pairs:
+                    result = run_blastn(file, database, num_threads=nthreads)
+                    hits = blastn_results_processing(data=result, consensus_name=os.path.basename(file),
+                                                    database=database, dir=dir,
+                                                    qcovus_treshold=qcovus, pident_treshold=pident)
+                    blast_aln = file[:-2] + 'txt' # path to blastn_aln file
+                    run_blastn_alignments(input_file=file, output_file=blast_aln,
+                                          database=database, hits=hits, num_threads=nthreads)
        
-    #     pairs = []
+        pairs = []
 
-    # # Create new dirs and move files with special extensions to these dirs
-    # fa_files = list_of_files(dir, "fa") # full paths to fa files
-    # aln_files = list_of_files(dir, "aln") # full paths to aln files
-    # txt_files = list_of_files(dir, "txt") # full paths to txt files
+    # Create new dirs and move files with special extensions to these dirs
+    fa_files = list_of_files(dir, "fa") # full paths to fa files
+    aln_files = list_of_files(dir, "aln") # full paths to aln files
+    txt_files = list_of_files(dir, "txt") # full paths to txt files
 
-    # create_dir(dir + "/fasta")
-    # create_dir(dir + "/consensus_alns")
-    # create_dir(dir + "/blast_alns")
+    create_dir(dir + "/fasta")
+    create_dir(dir + "/consensus_alns")
+    create_dir(dir + "/blast_alns")
 
-    # move_files(dir + "/fasta", fa_files)
-    # move_files(dir + "/consensus_alns", aln_files)
-    # move_files(dir + "/blast_alns", txt_files)
+    move_files(dir + "/fasta", fa_files)
+    move_files(dir + "/consensus_alns", aln_files)
+    move_files(dir + "/blast_alns", txt_files)
 
     # Delete unnessesary cols in report
     report.drop(columns=["filename", "path", "dir", "primer_orientation"], inplace=True)
     # report["is_consensus"] = report["is_consensus"].fillna(False)
 
-    # # Save report as .csv
-    # report.to_csv(dir + "/report.csv", sep='\t', index=False, header=True, encoding='utf-8', mode="a")
+    # Save report as .csv
+    report.to_csv(dir + "/report.csv", sep='\t', index=False, header=True, encoding='utf-8', mode="a")
 
     print("Done!")
 
