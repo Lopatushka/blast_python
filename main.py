@@ -1,8 +1,6 @@
 from scripts import *
 
 def main():
-    print("Running program... Wait...")
-
     # Read command-line arguments
     args = parse_arguments()
     dir = args.directory
@@ -18,6 +16,8 @@ def main():
     qcovus = args.qcovus
     pident = args.pident
 
+    print("Running program... Wait...")
+
     #print(args)
     
     # Parsing starts
@@ -26,45 +26,42 @@ def main():
     elif parsing_mode == "manual":
         ab1_files = list_of_files_by_pattern(dir=dir, extension="ab1", patterns=parsing_patterns)
 
+    # Check if there is ab1 files founded
     if not ab1_files:
-        raise FileNotFoundError(f"There is no .ab1 files in the provided directory: {dir}")
+        raise FileNotFoundError(f"No .ab1 files is founded by your query.")
+   
+    data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files metadata
 
-    print(ab1_files)    
-    # data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files data
-
-
-    # # Initialize report dataframe, add two additional columns
-    # report = pd.DataFrame(data)
-    # report["is_long"] = False
-    # report["is_consensus"] = False
+    # Initialize report dataframe, add two additional columns
+    report = pd.DataFrame(data)
+    report["is_long"] = False
+    report["is_consensus"] = False
     
-    # '''1st cycle - trimming, make revese complement'''
-    # for file in data:
-    #     # Generation of fastq files
-    #     fq = file["path"][:-3]+"fq" # path to fastq file
-    #     ab1_to_fastq(file["path"], fq) # create fq file from ab1 file
+    '''1st cycle - trimming, make revese complement'''
+    for file in data:
+        # Generation of fastq files
+        fq = file["path"][:-3]+"fq" # path to fastq file
+        ab1_to_fastq(file["path"], fq) # create fq file from ab1 file
 
-    #     # Trimming fastq files
-    #     fq_trimmed = fq[:-3] + "_trimmed.fq" # path to trimmed fastq file
-    #     run_bbduk(fq, fq_trimmed, trimq = trimming_quality, minlength = minlength)
+        # Trimming fastq files
+        fq_trimmed = fq[:-3] + "_trimmed.fq" # path to trimmed fastq file
+        run_bbduk(fq, fq_trimmed, trimq = trimming_quality, minlength = minlength)
 
-    #     # Convert trimmed fastq file to fasta file if exists AND not empty
-    #     if os.path.isfile(fq_trimmed) and not_empty_file(fq_trimmed):
-    #         # Add info to report
-    #         report.loc[report["filename"] == file["filename"], "is_long"] = True
-    #         fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
-    #         fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
+        # Convert trimmed FASTQ file to FASTA file if it exists AND not empty
+        if is_file_exists(fq_trimmed):
+            # Add info to report
+            report.loc[report["filename"] == file["filename"], "is_long"] = True
+            fa_trimmed = fq_trimmed[:-2]+"fa" # path to trimmed fasta file
+            fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
 
-    #         # Make reverse complement if primer is reverse
-    #         if ("R" in file['primer'].split("-")[1]) | ("r" in file['primer'].split("-")[1]):
-    #             fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
-    #             reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
-    #             remove_file(fa_trimmed) # remove original fasta file
-    #     else:
-    #         # Add info to report
-    #         report.loc[report["filename"] == file["filename"], "is_long"] = False # pass
+            # Make reverse complement if primer is reverse
+            if ("R" in file['primer'].split("-")[1]) | ("r" in file['primer'].split("-")[1]):
+                fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
+                reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
+                remove_file(fa_trimmed) # remove original fasta file
     
-    # remove_files_with_extension(dir = dir, extension="fq") # remove .fq files
+    # Remove all FASTQ files
+    remove_files_with_extension(dir = dir, extension="fq")
 
     # '''2nd cycle - make alignment, build consensus, blast'''
     # if blastn_mode == "auto":
