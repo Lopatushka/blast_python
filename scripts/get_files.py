@@ -145,7 +145,8 @@ def list_of_files_by_pattern(dir, extension, patterns):
         for file in files:
             if pattern in file:
                 files_to_process.append(file)
-    return files_to_process
+    unique_files = list(set(files_to_process))
+    return unique_files
 
 
 def filename_parsing(file):
