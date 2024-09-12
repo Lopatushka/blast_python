@@ -1,5 +1,4 @@
 import os
-#from pathlib import Path
 import warnings
 class FileOverwrittenWarning(UserWarning):
     pass
@@ -12,9 +11,6 @@ def check_files_exist(file_paths_list):
     for filepath in file_paths_list:
         check_1_file_exists(filepath)
     
-def _not_empty_file(file_path):
-    return Path(file_path).stat().st_size != 0
-
 def file_already_exists(file_path):
     try:
         if os.path.isfile(file_path):
