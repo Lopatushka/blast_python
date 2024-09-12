@@ -29,8 +29,9 @@ def main():
     # Check if there is ab1 files founded
     if not ab1_files:
         raise FileNotFoundError(f"No .ab1 files is founded by your query.")
-   
-    data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files metadata
+    
+    # Dictionary with ab1 files metadata
+    data = [result for file in ab1_files if (result := filename_parsing(file))]
     
     # Initialize report dataframe, add two additional columns
     report = pd.DataFrame(data)
@@ -75,13 +76,10 @@ def main():
             warnings.warn("There is no FASTA files for BLASTN search. Check --consensus_patterns arguments and --minlength value provided.")
             return None
         
-    # data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
-    # if not data:
-    #     warnings.warn("No files for blastn search since they are all low-quality. You can try to decrease the --minlength value.")
-    #     print("Done!")
-    #     return None
-    
-    # sample_names = np.unique([file['sample_name_primer'] for file in data if file]).tolist() #  store unique sample_names_primers in array
+    # Dictionary with FASTA files metadata   
+    data = [result for file in fa_files if (result := filename_parsing(file))]
+    # Store unique sample_names_primers in array
+    sample_names = np.unique([file['sample_name_primer'] for file in data if file]).tolist()
     
     # # Store paths to .fa files with the identical sample names in array to build consensus if possible
     # for sample_name in sample_names:
