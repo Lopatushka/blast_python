@@ -1,7 +1,7 @@
 from scripts import *
 
 def main():
-    # Read command-line arguments
+    # Initialize arguments
     args = parse_arguments()
     dir = args.directory
     parsing_mode = args.parsing_mode
@@ -31,7 +31,7 @@ def main():
         raise FileNotFoundError(f"No .ab1 files is founded by your query.")
    
     data = [result for file in ab1_files if (result := filename_parsing(file))] # dictionary with files metadata
-
+    
     # Initialize report dataframe, add two additional columns
     report = pd.DataFrame(data)
     report["is_long"] = False
@@ -55,7 +55,7 @@ def main():
             fastq_to_fasta(fq_trimmed, fa_trimmed) # create trimmed fasta file
 
             # Make reverse complement if primer is reverse
-            if ("R" in file['primer'].split("-")[1]) | ("r" in file['primer'].split("-")[1]):
+            if ("R" in file['primer_orientation']) | ("r" in file['primer_orientation']):
                 fa_trimmed_rc = fa_trimmed[:-3] + "_rc.fa" # path to fasta revese complement
                 reverse_complement_fasta(fa_trimmed, fa_trimmed_rc) # make revesrse complement fasta file
                 remove_file(fa_trimmed) # remove original fasta file
@@ -63,12 +63,18 @@ def main():
     # Remove all FASTQ files
     remove_files_with_extension(dir = dir, extension="fq")
 
-    # '''2nd cycle - make alignment, build consensus, blast'''
-    # if blastn_mode == "auto":
-    #     fa_files = list_of_files(dir, "fa") # full paths to .fa files
-    # elif blastn_mode == "manual":
-    #     fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
-
+    '''2nd cycle - make alignment, build consensus, blast'''
+    if blastn_mode == "auto":
+        fa_files = list_of_files(dir, "fa") # full paths to .fa files
+        if not fa_files:
+            warnings.warn("There is no FASTA files for BLASTN search. Check --minlength value provided.")
+            return None
+    elif blastn_mode == "manual":
+        fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
+        if not fa_files:
+            warnings.warn("There is no FASTA files for BLASTN search. Check --consensus_patterns arguments and --minlength value provided.")
+            return None
+        
     # data = [result for file in fa_files if (result := filename_parsing(file))] # filename parsing of all .fa files
     # if not data:
     #     warnings.warn("No files for blastn search since they are all low-quality. You can try to decrease the --minlength value.")
@@ -154,14 +160,14 @@ def main():
     # move_files(dir + "/consensus_alns", aln_files)
     # move_files(dir + "/blast_alns", txt_files)
 
-    # # Modify report dataframe
-    # report.drop(columns=["filename", "path", "dir"], inplace=True) # delete unnessesary cols
+    # Delete unnessesary cols in report
+    report.drop(columns=["filename", "path", "dir", "primer_orientation"], inplace=True)
     # report["is_consensus"] = report["is_consensus"].fillna(False)
 
     # # Save report as .csv
     # report.to_csv(dir + "/report.csv", sep='\t', index=False, header=True, encoding='utf-8', mode="a")
 
-    # print("Done!")
+    print("Done!")
 
 
 if __name__ == "__main__":
