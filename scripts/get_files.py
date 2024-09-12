@@ -47,8 +47,15 @@ def check_blast_database(database):
     except Exception as e:
         raise argparse.ArgumentTypeError(f"Unexpected error occured during --database argument checking: {e}")
 
+class CustomArgumentParser(argparse.ArgumentParser):
+    def warning(self, message):
+        # Raise a warning instead of exiting
+        warnings.warn(f"Warning: {message}")
+        # Optionally, return or perform other actions
+        # return None
+        
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Reads trimming, build consensus and perform blastn.")
+    parser = CustomArgumentParser(description="Reads trimming, build consensus and perform blastn.")
     parser.add_argument('--directory', '-d', type=is_valid_directory, required=True, help='Directory containing .ab1 files')
     parser.add_argument('--parsing_mode', '-pm', type=str, default="auto", choices=["auto", "manual"], help='Filenames parsing mode. Options: auto (default), manual')
     parser.add_argument('--parsing_patterns', '-pp', nargs='*', type=str, default=list(), help='Unique patterns in filenames of .ab1 files for manual consensus building')
@@ -68,7 +75,23 @@ def parse_arguments():
                         help='Query coverage threshold. Permissiable value range is [1, 100]. Default value is 80.')
     parser.add_argument('--pident', '-pi', type=check_range(1, 100), default=95,
                         help='Percent of identity threshold. Permissiable value range is [1, 100]. Default value is 95.')
-    return parser.parse_args()
+    
+    # Parse the command-line arguments
+    args = parser.parse_args()
+
+    # Custom validation
+    if (args.parsing_mode == 'manual') and not args.parsing_patterns:
+        parser.error("--parsing_patterns is required since --parsing_mode is set to 'manual'")
+
+    if (args.parsing_mode == 'auto') and args.parsing_patterns:
+        parser.warning("--parsing_patterns is ignored since --parsing_patterns is set to 'auto'")
+
+    if (args.blastn_mode == 'manual') and not args.consensus_patterns:
+        parser.error("--consensus_patterns is required since --blastn_mode is set to 'manual'")
+
+    if (args.blastn_mode == 'auto') and args.consensus_patterns:
+        parser.warning("--consensus_patterns is ignored since --blastn_mode is set to 'auto'")
+    return args
 
 def list_of_files(dir, extension):
         '''
