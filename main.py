@@ -91,9 +91,6 @@ def main():
 
         # ONLY ONE FASTA file with this particular 'sample_name_primer'
         if length == 1:
-            # Add info to report
-            #report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = False
-
             # BLASTN search
             result = run_blastn(pairs[0], database, num_threads=nthreads)
             hits = blastn_results_processing(data=result, consensus_name=pairs[0],
@@ -134,9 +131,6 @@ def main():
                                       database=database, hits=hits, num_threads=nthreads)
             # If BAD consensus
             else:
-            #     # Add info to report
-            #     report.loc[report["sample_name_primer"] == sample_name, "is_consensus"] = False
-
                 # BLASTN search for files in pairs independently
                 for file in pairs:
                     result = run_blastn(file, database, num_threads=nthreads)
@@ -164,13 +158,10 @@ def main():
 
     # Delete unnessesary cols in report
     report.drop(columns=["filename", "path", "dir", "primer_orientation"], inplace=True)
-    # report["is_consensus"] = report["is_consensus"].fillna(False)
-
     # Save report as .csv
     report.to_csv(dir + "/report.csv", sep='\t', index=False, header=True, encoding='utf-8', mode="a")
 
     print("Done!")
-
 
 if __name__ == "__main__":
     main()
