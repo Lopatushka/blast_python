@@ -211,6 +211,7 @@ def filename_parsing(file):
                     'sample_type': sample_type,
                     'sample_name': sample_name,
                     'primer': primer,
+                    'primer_orientation':primer_orientation,
                     'sample_name_primer':sample_name_primer,
                     'path': file,
                     'dir': dir}
