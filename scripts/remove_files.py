@@ -4,8 +4,10 @@ import glob
 import warnings
 from .get_files import list_of_files
 
-def remove_files_by_pattern(directory, extention, pattern):
-    # List all files in the directory
+def _remove_files_by_pattern(directory, extention, pattern):
+    """
+    EXTRA FUNCTION
+    """
     fasta_files = list_of_files(directory, extention)
     matching_files = [file for file in fasta_files if pattern in file]
     if matching_files:
