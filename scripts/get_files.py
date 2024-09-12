@@ -93,14 +93,11 @@ def list_of_files(dir, extension):
             subset_of_files=[file for file in files if f'.{extension}' in file] # full paths to .ext files
             return subset_of_files
         except FileNotFoundError as e:
-            warnings.warn(f"Directory '{dir}' is not found: {e}")
-            return []
+            warnings.warn(f"Directory '{dir}' is not found: {e}") # kinda rebundant: I check dir in get_files.py
         except PermissionError as e:
             warnings.warn(f"Permission denied for directory '{dir}': {e}")
-            return []
         except Exception as e:
             warnings.warn(f"An unexpected error occurred while listing files in directory '{dir}': {e}")
-            return []
 
 def list_of_files_by_pattern(dir, extension, patterns):
     '''
