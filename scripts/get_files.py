@@ -15,7 +15,7 @@ def check_range(min_value, max_value):
         try:
             value = int(value)
         except ValueError as e:
-            raise argparse.ArgumentTypeError(e)
+            raise argparse.ArgumentTypeError(f"Value '{value}' must be integer: {e}")
         if value < min_value or value > max_value:
             raise argparse.ArgumentTypeError(f"Value '{value}' is outside the range [{min_value}, {max_value}].")
         return value
