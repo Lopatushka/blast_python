@@ -68,12 +68,14 @@ def main():
     if blastn_mode == "auto":
         fa_files = list_of_files(dir, "fa") # full paths to .fa files
         if not fa_files:
-            warnings.warn("There is no FASTA files for BLASTN search. Check --minlength value provided.")
+            print("There is no FASTA files for BLASTN search. Check --minlength value provided.")
+            print("Done!")
             return None
     elif blastn_mode == "manual":
         fa_files = list_of_files_by_pattern(dir=dir, extension="fa", patterns=consensus_patterns)
         if not fa_files:
-            warnings.warn("There is no FASTA files for BLASTN search. Check --consensus_patterns arguments and --minlength value provided.")
+            print("There is no FASTA files for BLASTN search. Check --consensus_patterns arguments and --minlength value provided.")
+            print("Done!")
             return None
         
     # Dictionary with FASTA files metadata   
