@@ -123,7 +123,6 @@ To exit server run:
 ```bash
 exit
 ```
-
 For more details read *slurm* documentation.
 
 ## Nucleotide Blast database
