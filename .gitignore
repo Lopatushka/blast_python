@@ -1,14 +1,8 @@
 # Folders
 data/
-test/
-scripts/server/
 scripts/__pycache__
 
 # Taxonomy files
 taxdb.btd
 taxdb.bti
 taxonomy4blast.sqlite3
-
-# Files
-test.py
-server_password.txt
