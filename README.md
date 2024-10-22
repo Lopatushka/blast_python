@@ -68,19 +68,12 @@ dir = 'path/to/ab1_files'
 database = '/home/user_name/directory_name/database_name'
 python main.py -d $dir -db $database
 ```
-## Work on server
+## Work on server using Slurm workload manager
 To access server run:
 ```bash
 ssh user_name@10.100.20.211
 conda activate name_of_enviroment
 cd path/to/working_dir
-```
-Example:
-
-```bash
-ssh elopatuhina@10.100.20.211
-conda activate bioinfo
-cd blast_python
 ```
 
 To check the server workload use these commands:
@@ -93,26 +86,26 @@ You need to use the node with:
 * minimum CPU_LOAD percentage
 * maximum MEMORY resorces available 
 
-Modify **slurm_blast.sh** script (it is located in the *server* folder)  in **vi** text editor based on your requirements:
+Modify **blastn.sh** script (it is located in the *server* folder)  in **vi** text editor based on your requirements:
 * job-name
 * ntasks-per-node - it should be the same as -nt argument in python main.py command
 * nodelist
 * path to stdout file
 * path to stderr file
 
-Run **slurm_blast.sh** script:
+Run **blastn.sh** script:
 ```bash
-sbatch path/to/slurm_blast.sh path/to/directory path/to/blast_database
+sbatch path/to/blastn.sh path/to/directory path/to/blast_database
 ```
 
 Example:
 ```bash
-sbatch ./server/slurm_blast.sh /home/elopatuhina/sanger_seq/140424 /home/elopatuhina/db/db_nt_prok/nt_prok
+sbatch ./server/blastn.sh /home/user/sanger_seq/140424 /home/user/db/db_nt_prok/nt_prok
 ```
 
 Check job status. Example:
 ```bash
-squeue -u elopatuhina
+squeue -u user
 ```
 
 *Optional*. To monitor job status you can also use an axualiry script **clock.sh** (in *server* folder)
